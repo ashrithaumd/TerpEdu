@@ -1,10 +1,11 @@
 from flask import Flask, render_template
 from routes.test_route import test_bp
+from routes.course_route import course_bp
 
 app = Flask(__name__)
-app.config.from_object("config")
 
 app.register_blueprint(test_bp, url_prefix="/user")
+app.register_blueprint(course_bp, url_prefix="/course")
 
 
 @app.route("/")

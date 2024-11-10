@@ -1,4 +1,6 @@
+from flask import render_template
 from dao.user_dao import UserDao
+from model.user import User
 
 
 class UserController:
@@ -13,8 +15,9 @@ class UserController:
         return "store"
 
     def show(self, user_id):
-        self._user_dao.get_user(user_id)
-        return "show"
+        userid, username, password = self._user_dao.get_user(user_id)
+        user = User(userid, username, password)
+        return render_template("users/show.html", data={"user": user})
 
     def update(self, user_id):
         return "update"

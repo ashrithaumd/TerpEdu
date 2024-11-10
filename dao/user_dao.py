@@ -13,5 +13,5 @@ class UserDao:
     def get_user(self, user_id):
         sql = "SELECT * FROM users WHERE id = %s"
         params = [user_id]
-        data = dao.execute_query(sql, params)
-        return data[0][0]
+        data = dao.execute_query(sql, params)        
+        return data[0]
