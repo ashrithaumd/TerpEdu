@@ -1,6 +1,6 @@
 from flask import render_template
 from dao.user_dao import UserDao
-from model.user import User
+from model.student import User
 
 
 class UserController:
