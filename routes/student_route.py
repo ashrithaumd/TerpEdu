@@ -1,6 +1,6 @@
 # student_route.py
 from flask import Blueprint
-from ..controller.student_controller import get_enrolled_courses, get_course_materials, get_course_info
+from controller.student_controller import get_enrolled_courses, get_course_materials, get_course_info
 
 
 student_bp = Blueprint('student_bp', __name__)

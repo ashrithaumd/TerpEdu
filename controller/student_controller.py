@@ -1,6 +1,6 @@
 # student_controller.py
 from flask import jsonify, request
-from ..dao.student_dao import StudentDao
+from dao.student_dao import StudentDao
 
 student_dao = StudentDao()
 

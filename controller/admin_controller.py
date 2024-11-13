@@ -1,6 +1,6 @@
 # admin_controller.py
 from flask import jsonify, request
-from ..dao.admin_dao import AdminDao
+from dao.admin_dao import AdminDao
 
 admin_dao = AdminDao()
 
