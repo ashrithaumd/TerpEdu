@@ -3,35 +3,22 @@ import dao
 class CourseDao:
     def __init__(self):
         pass
-
-    def create_courses_table(self):
+    
+    def courses(self, course_name, description, credits, department, semester, is_currently_active=True):
         sql = """
-        CREATE TABLE IF NOT EXISTS courses (
-            id INT PRIMARY KEY AUTO_INCREMENT,
-            course_name VARCHAR(100) NOT NULL,
-            description TEXT,
-            credits INT,
-            department VARCHAR(50),
-            semester ENUM('Fall', 'Spring', 'Summer'),
-            is_currently_active BOOLEAN DEFAULT TRUE
-        );
+        INSERT INTO courses (course_name, description, credits, department, semester, is_currently_active)
+        VALUES (%s, %s, %s, %s, %s, %s);
         """
-        dao.execute_non_query(sql)
+        params = (course_name, description, credits, department, semester, is_currently_active)
+        dao.execute_query(sql, params)
 
-    def create_course_materials_table(self):
+    def course_materials(self, course_id, material_type, title, file_path):
         sql = """
-        CREATE TABLE IF NOT EXISTS course_materials (
-            material_id INT PRIMARY KEY AUTO_INCREMENT,
-            course_id INT NOT NULL,
-            material_type ENUM('PDF', 'Video', 'Document', 'Image') NOT NULL,
-            title VARCHAR(100),
-            upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            file_path VARCHAR(255),
-            FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
-        );
+        INSERT INTO course_materials (course_id, material_type, title, file_path)
+        VALUES (%s, %s, %s, %s);
         """
-        dao.execute_query(sql)
-
+        params = (course_id, material_type, title, file_path)
+        dao.execute_query(sql, params)
 
     def get_course(self, course_id):
         sql = "SELECT course_name FROM courses WHERE id = %s"
