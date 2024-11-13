@@ -1,5 +1,5 @@
 from dao.course_dao import CourseDao
-
+from flask import render_template, request
 
 class CourseController:
     def __init__(self):
@@ -8,12 +8,23 @@ class CourseController:
     def create(self):
         self._course_dao.save_course("test")
         return "saved"
+        
+    def courses(self):
+        if request.method == "POST":
+            course_name = request.form['course_name']
+            description = request.form['description']
+            credits = request.form['credits']
+            department = request.form['department']
+            semester = request.form['semester']
+            is_currently_active = 'is_currently_active' in request.form
+            self._course_dao.create_course(course_name, description, credits, department, semester, is_currently_active)
+            
+            return "Course created successfully!"  
+        return render_template("course_form.html")
+
     
-    def create_courses_table(self):
-        return self._course_dao.create_courses_table()
-    
-    def create_course_materials_table(self):
-        return self._course_dao.create_course_materials_table()
+    def course_materials(self):
+        return self._course_dao.course_materials()
     
     def get_course(self, course_id):
         return self._course_dao.get_course(course_id)

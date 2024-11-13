@@ -1,51 +1,35 @@
 import dao
 
-
 class UserDao:
     def __init__(self):
         pass
-    
-    def create_users(self):
-        sql="""
-            CREATE TABLE Users (
-            UserID INT PRIMARY KEY AUTO_INCREMENT,
-            Name VARCHAR(100),
-            Email VARCHAR(100) UNIQUE,
-            Password VARCHAR(100),
-            Role ENUM('Student', 'Instructor', 'Admin'),
-            DateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
+
+    def create_users(self, name, email, password, role):
+        sql = """
+        INSERT INTO Users (Name, Email, Password, Role)
+        VALUES (%s, %s, %s, %s);
         """
-        dao.execute_non_query(sql)
-        
-    def additional_info_users(self):
-        sql="""
-        CREATE TABLE Profiles (
-        ProfileID INT PRIMARY KEY AUTO_INCREMENT,
-        UserID INT,
-        Address VARCHAR(255),
-        PhoneNumber VARCHAR(20),
-        DateOfBirth DATE,
-        FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE
-        );
+        params = (name, email, password, role)
+        dao.execute_query(sql, params)
+
+    def additional_info_users(self, user_id, address, phone_number, date_of_birth):
+        sql = """
+        INSERT INTO Profiles (UserID, Address, PhoneNumber, DateOfBirth)
+        VALUES (%s, %s, %s, %s);
         """
-        dao.execute_non_query(sql)
-        
-    def notifications(self):
-        sql="""
-        CREATE TABLE Notifications (
-        NotificationID INT PRIMARY KEY AUTO_INCREMENT,
-        UserID INT NOT NULL,
-        Message TEXT,
-        DateSent TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        Status ENUM('Read', 'Unread') DEFAULT 'Unread',
-        FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE
-        );
+        params = (user_id, address, phone_number, date_of_birth)
+        dao.execute_query(sql, params)
+
+    def notifications(self, user_id, message):
+        sql = """
+        INSERT INTO Notifications (UserID, Message)
+        VALUES (%s, %s);
         """
-        dao.execute_non_query(sql)
-    
+        params = (user_id, message)
+        dao.execute_query(sql, params)
+
     def get_user(self, user_id):
-        sql = "SELECT * FROM users WHERE id = %s"
+        sql = "SELECT * FROM Users WHERE UserID = %s"
         params = [user_id]
         data = dao.execute_query(sql, params)        
         return data[0]

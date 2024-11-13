@@ -20,40 +20,23 @@ def close_db_connection(conn):
     if conn:
         conn.close()
 
-# Function to execute a query (SELECT)
-def execute_query(sql, params=None):
+def execute_query(sql, params=None, fetch=False):
     connection = get_db_connection()
     if connection:
-        cursor = connection.cursor()
-        cursor.execute(sql, params)
-        data = cursor.fetchall()
-        cursor.close()
-        close_db_connection(connection)
-        return data
+        try:
+            cursor = connection.cursor()
+            cursor.execute(sql, params)
+            if fetch:
+                data = cursor.fetchall()
+            else:
+                connection.commit()
+                data = None
+            cursor.close()
+            return data
+        except Exception as e:
+            logger.error(f"Database operation failed: {e}")
+        finally:
+            close_db_connection(connection)
     else:
         logger.error("Failed to get database connection.")
         return None
-
-# Function to execute a non-query (INSERT, UPDATE, DELETE)
-def execute_non_query(sql, params=None):
-    connection = get_db_connection()
-    if connection:
-        cursor = connection.cursor()
-        cursor.execute(sql, params)
-        connection.commit()  # Commit changes for non-queries
-        cursor.close()
-        close_db_connection(connection)
-    else:
-        logger.error("Failed to get database connection.")
-
-# Function for insert queries (specific for INSERT operations)
-def insert_query(sql, params=None):
-    connection = get_db_connection()
-    if connection:
-        cursor = connection.cursor()
-        cursor.execute(sql, params)
-        connection.commit()
-        cursor.close()
-        close_db_connection(connection)
-    else:
-        logger.error("Failed to get database connection.")
