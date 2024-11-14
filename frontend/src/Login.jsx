@@ -1,4 +1,11 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 function Login() {
+    const navigate = useNavigate(); 
+    const handleSubmit = (event) => {
+      event.preventDefault(); 
+      navigate('/dash');
+    };
   return (
     <div>
       <style>
@@ -25,7 +32,6 @@ function Login() {
             top: 0;
             left: 0;
             z-index: 2;
-            padding-bottom:100px;
           }
 
           .login-container {
@@ -139,17 +145,17 @@ function Login() {
 
       <div className="login-container">
         <main className="main">
-        <div className="logo">
-          <img src="frontend/public/TerpEdu.png" alt="TerpEdu Logo" />
-        </div>
+          <div className="logo">
+            <img src="frontend/public/TerpEdu.png" alt="TerpEdu Logo" />
+          </div>
           <div className="login-box">
             <h3>LOGIN</h3>
             <div className="login-icons">
-              <img src="graduation-hat.png" alt="Graduation Hat" className="icon"/>
+              <img src="graduation-hat.png" alt="Graduation Hat" className="icon" />
               <span>x</span>
-              <img src="maryland-logo.png" alt="Maryland Logo" className="icon"/>
+              <img src="maryland-logo.png" alt="Maryland Logo" className="icon" />
             </div>
-            <form>
+            <form onSubmit={handleSubmit}> {/* Add onSubmit handler */}
               <input type="email" placeholder="Email" />
               <input type="password" placeholder="Password" />
               <button type="submit" className="login-button">Login</button>
