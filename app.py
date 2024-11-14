@@ -37,7 +37,9 @@ def serve_react_app(path):
         return send_from_directory(app.static_folder, path)
     else:
         return send_from_directory(app.static_folder, 'index.html')
-
+@app.route('/dash')
+def dash():
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'Dash.jsx')
 # Start the Flask application
 if __name__ == "__main__":
     app.run(debug=True)
