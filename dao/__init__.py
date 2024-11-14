@@ -33,8 +33,9 @@ def execute_query(sql, params=None, fetch=False):
                 data = None
             cursor.close()
             return data
-        except Exception as e:
+        except mysql.connector.Error as e:  
             logger.error(f"Database operation failed: {e}")
+            print(f"Database error: {e}") 
         finally:
             close_db_connection(connection)
     else:

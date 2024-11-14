@@ -12,6 +12,7 @@ class CourseDao:
         params = (course_name, description, credits, department, semester, is_currently_active)
         dao.execute_query(sql, params)
 
+
     def course_materials(self, course_id, material_type, title, file_path):
         sql = """
         INSERT INTO course_materials (course_id, material_type, title, file_path)
