@@ -11,6 +11,7 @@ function Login() {
 
   const handleSignup = (event) => {
     event.preventDefault();
+    console.log("signup button clicked");
     navigate('/signup');
   };
 
@@ -109,7 +110,7 @@ function Login() {
             box-shadow: 0 0 5px rgba(173, 216, 230, 0.6);
           }
 
-          .login-button, .signup-button {
+          .login-button {
             width: 100%;
             padding: 12px;
             background-color: #d32f2f;
@@ -118,7 +119,7 @@ function Login() {
             border-radius: 5px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 10px; /* Adds spacing between buttons */
+            margin-top: 10px;
           }
 
           .side-image-container {
@@ -136,6 +137,16 @@ function Login() {
             height: auto;
             position: relative;
             left: -85px;
+          }
+          .signup-button{
+            width:100%;
+            padding:5%;
+            margin-top: 5px;
+            background-color: #d32f2f;
+            color: white;
+            cursor: pointer;
+             border: none;
+            border-radius: 5px;
           }
         `}
       </style>
@@ -161,8 +172,8 @@ function Login() {
               <input type="password" placeholder="Password" required />
               <button type="submit" className="login-button">Login</button>
             </form>
+            <button onClick={handleSignup} className="signup-button">Signup</button>
           </div>
-          <button onClick={handleSignup} className="signup-button">Signup</button>
         </main>
 
         <div className="side-image-container">
