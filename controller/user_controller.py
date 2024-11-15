@@ -1,26 +1,27 @@
-from flask import render_template
+from flask import render_template,request
 from dao.user_dao import UserDao
 from model.student import User
-
 
 class UserController:
     def __init__(self):
         self._user_dao = UserDao()
 
-    def index(self):
-        self._user_dao.save_user("test", "test")
-        return "index"
+    def create_user(self):
+        if request.method == "POST":
+        # Extract data from the form
+            UserID = request.form['UserID']
+            name = request.form['name']
+            email = request.form['email']
+            password = request.form['password']
+            role = request.form['role']
+            address = request.form['address']
+            phone_number = request.form['phone_number']
+            date_of_birth = request.form['date_of_birth']
+            self._user_dao.create_users(UserID, name, email, password, role)
+            self._user_dao.additional_info_users(UserID, address, phone_number, date_of_birth)
 
-    def store(self):
-        return "store"
+            return "User created successfully!" 
+        
+        return render_template("frontend/src/signup.jsx")
 
-    def show(self, user_id):
-        userid, username, password = self._user_dao.get_user(user_id)
-        user = User(userid, username, password)
-        return render_template("users/show.html", data={"user": user})
-
-    def update(self, user_id):
-        return "update"
-
-    def delete(self, user_id):
-        return "delete"
+        
