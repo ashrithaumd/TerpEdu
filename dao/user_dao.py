@@ -6,7 +6,7 @@ class UserDao:
 
     def create_users(self, name, email, password, role):
         sql = """
-        INSERT INTO Users (Name, Email, Password, Role)
+        INSERT INTO Users (UserID, Name, Email, Password, Role, DateCreated)
         VALUES (%s, %s, %s, %s);
         """
         params = (name, email, password, role)

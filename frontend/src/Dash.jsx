@@ -37,6 +37,7 @@ function Dash() {
         background-color: #757575;
         color: white;
         padding: 10px;
+        width:20px;
         }
 
         .navbar span {

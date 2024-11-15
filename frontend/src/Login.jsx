@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 function Login() {
-    const navigate = useNavigate(); 
-    const handleSubmit = (event) => {
-      event.preventDefault(); 
-      navigate('/dash');
-    };
+  const navigate = useNavigate();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    navigate('/dash');
+  };
+
+  const handleSignup = (event) => {
+    event.preventDefault();
+    navigate('/signup');
+  };
+
   return (
     <div>
       <style>
@@ -41,7 +49,7 @@ function Login() {
             text-align: center;
             position: relative;
             z-index: 1;
-            margin-top: 60px;
+            margin-top: 40px;
           }
 
           .main {
@@ -101,7 +109,7 @@ function Login() {
             box-shadow: 0 0 5px rgba(173, 216, 230, 0.6);
           }
 
-          .login-button {
+          .login-button, .signup-button {
             width: 100%;
             padding: 12px;
             background-color: #d32f2f;
@@ -110,19 +118,12 @@ function Login() {
             border-radius: 5px;
             font-weight: bold;
             cursor: pointer;
-          }
-
-          .forgot-password {
-            display: block;
-            margin-top: 10px;
-            color: #d32f2f;
-            font-size: 14px;
-            text-decoration: none;
+            margin-top: 10px; /* Adds spacing between buttons */
           }
 
           .side-image-container {
             position: absolute;
-            top: -20px;
+            top: -10px;
             right: -500px;
             width: 200px;
             height: 200%;
@@ -146,7 +147,7 @@ function Login() {
       <div className="login-container">
         <main className="main">
           <div className="logo">
-            <img src="frontend/public/TerpEdu.png" alt="TerpEdu Logo" />
+            <img src="./frontend/public/TerpEdu.png" alt="TerpEdu Logo" />
           </div>
           <div className="login-box">
             <h3>LOGIN</h3>
@@ -155,13 +156,13 @@ function Login() {
               <span>x</span>
               <img src="maryland-logo.png" alt="Maryland Logo" className="icon" />
             </div>
-            <form onSubmit={handleSubmit}> {/* Add onSubmit handler */}
-              <input type="email" placeholder="Email" />
-              <input type="password" placeholder="Password" />
+            <form onSubmit={handleSubmit}>
+              <input type="userid" placeholder="UserId" required />
+              <input type="password" placeholder="Password" required />
               <button type="submit" className="login-button">Login</button>
             </form>
-            <a href="/" className="forgot-password">Forgot password?</a>
           </div>
+          <button onClick={handleSignup} className="signup-button">Signup</button>
         </main>
 
         <div className="side-image-container">

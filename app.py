@@ -24,10 +24,12 @@ migrate = Migrate(app, db)
 from routes.course_route import course_bp
 from routes.student_route import student_bp
 from routes.admin_route import admin_bp
+from routes.user_route import user_bp
 
 app.register_blueprint(course_bp, url_prefix='/course')
 app.register_blueprint(student_bp, url_prefix='/student')
 app.register_blueprint(admin_bp, url_prefix='/admin')
+app.register_blueprint(user_bp,url_prefix='/user')
 
 # Serve React frontend
 @app.route('/', defaults={'path': ''})
