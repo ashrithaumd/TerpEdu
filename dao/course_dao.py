@@ -4,12 +4,12 @@ class CourseDao:
     def __init__(self):
         pass
     
-    def create_course(self, course_name, description, credits, department, semester, is_currently_active=True):
+    def create_course(self,course_id, course_name, description, credits, department, semester, is_currently_active=True):
         sql = """
-        INSERT INTO courses (course_name, description, credits, department, semester, is_currently_active)
-        VALUES (%s, %s, %s, %s, %s, %s);
+        INSERT INTO courses (course_id, course_name, description, credits, department, semester, is_currently_active)
+        VALUES (%s, %s, %s, %s, %s, %s, %s);
         """
-        params = (course_name, description, credits, department, semester, is_currently_active)
+        params = (course_id, course_name, description, credits, department, semester, is_currently_active)
         dao.execute_query(sql, params)
 
 

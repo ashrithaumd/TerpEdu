@@ -1,192 +1,202 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Dash() {
+  const navigate = useNavigate();
+
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+
   return (
     <div>
-    <style>
+      <style>
         {`
-                /* General Styles */
+        /* General Styles */
         body {
-        margin: 0;
-        font-family: Arial, sans-serif;
+          margin: 0;
+          font-family: Arial, sans-serif;
         }
 
         .app {
-        display: flex;
-        flex-direction: column;
+          display: flex;
+          flex-direction: column;
         }
 
         /* Header */
         .header {
-        background-color: #D32F2F;
-        color: white;
-        padding: 10px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+          background-color: #D32F2F;
+          color: white;
+          padding: 10px 20px;
+          display: flex;
+          justify-content: center; /* Center align the content */
+          align-items: center;
+          position: relative; /* Allows positioning of profile icon */
         }
 
         .profile-icon {
-        font-size: 24px;
+          font-size: 24px;
+          position: absolute;
+          right: 20px; /* Adjusts position of profile icon */
         }
 
         /* Navbar */
         .navbar {
-        display: flex;
-        justify-content: space-around;
-        background-color: #757575;
-        color: white;
-        padding: 10px;
-        width:20px;
+          display: flex;
+          justify-content: space-around;
+          background-color: #757575;
+          color: white;
+          padding: 10px;
+          width: 100%;
         }
 
         .navbar span {
-        cursor: pointer;
+          cursor: pointer;
+          font-size: 16px; /* Increased font size */
         }
 
         /* Content Layout */
         .content {
-        display: flex;
-        padding: 20px;
+          display: flex;
+          padding: 20px;
         }
 
         /* Main Content */
         .main-content {
-        flex: 3;
+          flex: 3;
         }
 
         .main-content h2 {
-        margin-top: 0;
+          margin-top: 0;
         }
 
         /* Course Cards */
         .course-cards {
-        display: flex;
-        gap: 20px;
+          display: flex;
+          gap: 20px;
         }
 
         .course-card {
-        width: 150px;
-        height: 200px;
-        border-radius: 5px;
-        color: white;
-        display: flex;
-        align-items: flex-end;
-        padding: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          width: 150px;
+          height: 200px;
+          border-radius: 5px;
+          color: white;
+          display: flex;
+          align-items: flex-end;
+          padding: 10px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .course-content h4 {
-        margin: 0;
+          margin: 0;
         }
 
         .course-content p {
-        font-size: 12px;
-        color: #f0f0f0;
+          font-size: 12px;
+          color: #f0f0f0;
         }
 
         /* Sidebar */
         .sidebar {
-        flex: 1;
-        padding: 20px;
-        position: relative;
-        border-left: 2px solid #D32F2F;
-        overflow: hidden;
+          flex: 1;
+          padding: 20px;
+          position: relative;
+          border-left: 2px solid #D32F2F;
+          overflow: hidden;
         }
 
         .sidebar-content {
-        position: relative;
-        z-index: 2;
+          position: relative;
+          z-index: 2;
         }
 
         .todo-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-        z-index: 2;
+          display: flex;
+          align-items: center;
+          margin-bottom: 10px;
+          z-index: 2;
         }
 
         .todo-content {
-        margin-left: 10px;
+          margin-left: 10px;
         }
 
         .todo-content p {
-        margin: 0;
-        font-size: 14px;
+          margin: 0;
+          font-size: 14px;
         }
 
         .todo-content small {
-        color: gray;
+          color: gray;
         }
 
         /* Announcement */
         .announcement {
-        margin-top: 20px;
-        color: black;
+          margin-top: 20px;
+          color: black;
         }
 
         /* Background Image */
         .side-image-container {
-        position: absolute;
-        top: 0;
-        left: 200px;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        z-index: 1;
+          position: absolute;
+          top: 0;
+          left: 200px;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          z-index: 1;
         }
 
         .side-image {
-        width: 100%;
-        height: auto;
-        left:-185px;
-        opacity: 0.2;
-        filter: blur(1px);
+          width: 100%;
+          height: auto;
+          left: -185px;
+          opacity: 0.2;
+          filter: blur(1px);
         }
-
         `}
-    </style>
-    <div className="app">
-      <header className="header">
-        <h1>TerpEdu</h1>
-        <div className="profile-icon">👤</div>
-      </header>
-      <div className="navbar">
-        <span>Add/Drop</span>
-        <span>Inbox</span>
-        <span>To-do</span>
-        <span>Course Catalog</span>
-        <span>Calendar</span>
-      </div>
-      <div className="content">
-        <div className="main-content">
-          <h2>Welcome, Medini!</h2>
-          <div className="course-cards">
-            {renderCourseCard("Software Engineering", "ENPM611", "#D46A6A")}
-            {renderCourseCard("Software Design and Implementation", "ENPM612", "#B94CA7")}
-            {renderCourseCard("Software Testing and Maintenance", "ENPM614", "#4CA7D4")}
-            {renderCourseCard("Reverse Software Engineering", "ENPM696", "#6A4CD4")}
+      </style>
+      <div className="app">
+        <header className="header">
+          <h1>TerpEdu</h1>
+          <div className="profile-icon">👤</div>
+        </header>
+        <div className="navbar">
+          <span onClick={() => handleNavigation('/View_inst_courses')}>View my courses</span>
+          <span onClick={() => handleNavigation('/inbox')}>Inbox</span>
+          <span onClick={() => handleNavigation('/to-do')}>To-do</span>
+          <span onClick={() => handleNavigation('/course-catalog')}>Course Catalog</span>
+          <span onClick={() => handleNavigation('/calendar')}>Calendar</span>
+        </div>
+        <div className="content">
+          <div className="main-content">
+            <h2>Welcome, Medini!</h2>
+            <div className="course-cards">
+              {renderCourseCard("Software Engineering", "ENPM611", "#D46A6A")}
+              {renderCourseCard("Software Design and Implementation", "ENPM612", "#B94CA7")}
+              {renderCourseCard("Software Testing and Maintenance", "ENPM614", "#4CA7D4")}
+              {renderCourseCard("Reverse Software Engineering", "ENPM696", "#6A4CD4")}
+            </div>
+          </div>
+          <div className="sidebar">
+            <div className="side-image-container">
+              <img
+                src="https://media.istockphoto.com/id/1700535742/vector/turtle-icon.jpg?s=2048x2048&w=is&k=20&c=ZdczUpIyBaX2ymL9bs_i_SKQZUaEcogf4XdNPhB0Dbw="
+                alt="Side Turtle"
+                className="side-image"
+              />
+            </div>
+            <div className="sidebar-content">
+              <h3>To-do</h3>
+              {renderToDoItem("Action item 1", "Class A", "Due tomorrow")}
+              {renderToDoItem("Action item 2", "Class A", "Due tomorrow")}
+              {renderToDoItem("Action item 3", "Class A", "Due tomorrow")}
+              <h3>Announcements</h3>
+              <div className="announcement">XXX YYY - Class A, Professor<br />Dear all, ...</div>
+            </div>
           </div>
         </div>
-        <div className="sidebar">
-          <div className="side-image-container">
-            <img
-              src="https://media.istockphoto.com/id/1700535742/vector/turtle-icon.jpg?s=2048x2048&w=is&k=20&c=ZdczUpIyBaX2ymL9bs_i_SKQZUaEcogf4XdNPhB0Dbw="
-              alt="Side Turtle"
-              className="side-image"
-            />
-          </div>
-          <div className="sidebar-content">
-            <h3>To-do</h3>
-            {renderToDoItem("Action item 1", "Class A", "Due tomorrow")}
-            {renderToDoItem("Action item 2", "Class A", "Due tomorrow")}
-            {renderToDoItem("Action item 3", "Class A", "Due tomorrow")}
-            <h3>Announcements</h3>
-            <div className="announcement">XXX YYY - Class A, Professor<br />Dear all, ...</div>
-          </div>
-        </div>
       </div>
-    </div>
     </div>
   );
 }

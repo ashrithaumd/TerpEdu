@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template, request, redirect, url_for, session, jsonify
 from dao.user_dao import UserDao
 from model.student import User
 
@@ -55,3 +55,19 @@ class UserController:
                 return "Invalid UserID or password. Please try again."
 
         return render_template("frontend/src/login.jsx")
+
+    def get_notifications(self):
+        notifications = self._user_dao.get_all_notifications()
+
+        # Convert notifications to a suitable format for response (e.g., JSON)
+        response = [
+            {
+                "UserID": notification[1],
+                "Message": notification[2],
+                "DateSent": notification[3].strftime('%Y-%m-%d %H:%M:%S')   # Adjust if you have more columns
+            }
+            for notification in notifications
+        ]
+
+        return jsonify(response)
+

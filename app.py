@@ -1,4 +1,4 @@
-from flask import Flask, render_template, send_from_directory, redirect, url_for, session, request
+from flask import Flask, render_template, send_from_directory, redirect, url_for, session, request,jsonify
 from flask_migrate import Migrate
 from db import db  
 from model.course import Course, CourseMaterial
@@ -7,9 +7,11 @@ from model.admin import Enrollment, CourseInstructor
 from model.user import User, Profile, Notification
 from controller.user_controller import UserController  # Import UserController for handling login
 import os
+from flask_cors import CORS
 
 # Initialize the Flask app
 app = Flask(__name__, static_folder='frontend/build', static_url_path='')
+CORS(app)
 
 # Configure the app
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/terpedu'
@@ -27,11 +29,13 @@ from routes.course_route import course_bp
 from routes.student_route import student_bp
 from routes.admin_route import admin_bp
 from routes.user_route import user_bp
+from routes.inst_route import inst_bp
 
 app.register_blueprint(course_bp, url_prefix='/course')
 app.register_blueprint(student_bp, url_prefix='/student')
 app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(user_bp, url_prefix='/user')
+app.register_blueprint(inst_bp, url_prefix='/inst')
 
 # Instantiate the UserController
 user_controller = UserController()
