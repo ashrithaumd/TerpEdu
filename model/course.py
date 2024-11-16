@@ -2,7 +2,7 @@ from db import db
 
 class Course(db.Model):
     __tablename__ = 'courses'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    course_id=db.Column(db.Integer,primary_key=True,nullable=False)
     course_name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text)
     credits = db.Column(db.Integer)
@@ -15,7 +15,7 @@ class Course(db.Model):
 class CourseMaterial(db.Model):
     __tablename__ = 'course_materials'
     material_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.course_id'), nullable=False)
     material_type = db.Column(db.Enum('PDF', 'Video', 'Document', 'Image', name='material_type_enum'), nullable=False)
     title = db.Column(db.String(100))
     upload_date = db.Column(db.TIMESTAMP, default=db.func.current_timestamp())

@@ -27,6 +27,14 @@ class UserDao:
         """
         params = (user_id, message)
         dao.execute_query(sql, params)
+    
+    def get_all_notifications(self):
+            sql = """
+                SELECT * FROM notifications;
+                """
+            results = dao.execute_query(sql,fetch=True)  
+            return results
+
 
     def get_user(self, user_id):
         sql = "SELECT * FROM Users WHERE UserID = %s"

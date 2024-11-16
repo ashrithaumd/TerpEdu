@@ -26,4 +26,4 @@ class Notification(db.Model):
     UserID = db.Column(db.Integer, db.ForeignKey('users.UserID'), nullable=False)
     Message = db.Column(db.Text)
     DateSent = db.Column(db.TIMESTAMP, default=db.func.current_timestamp())
-    Status = db.Column(db.Enum('Read', 'Unread', name='status_enum'), default='Unread')
+    
