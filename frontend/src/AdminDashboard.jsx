@@ -7,6 +7,7 @@ function AdminDashboard() {
         {`
           body {
             margin: 0;
+            width:10px;
             font-family: Arial, sans-serif;
           }
 
