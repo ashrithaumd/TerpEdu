@@ -1,17 +1,21 @@
-from flask import Flask, render_template, send_from_directory, redirect, url_for, session, request,jsonify
+from flask import Flask, send_from_directory, redirect, url_for, session, request, jsonify
 from flask_migrate import Migrate
 from db import db  
 from model.course import Course, CourseMaterial
 from model.student import User
 from model.admin import Enrollment, CourseInstructor
 from model.user import User, Profile, Notification
-from controller.user_controller import UserController  # Import UserController for handling login
+from controller.user_controller import UserController
 import os
 from flask_cors import CORS
+from sqlalchemy import text
+
 
 # Initialize the Flask app
 app = Flask(__name__, static_folder='frontend/build', static_url_path='')
-CORS(app)
+
+# Configure CORS for the app
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})  # Allow CORS only for /api/* routes from localhost:3000
 
 # Configure the app
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/terpedu'
@@ -49,32 +53,26 @@ def serve_react_app(path):
     else:
         return send_from_directory(app.static_folder, 'index.html')
 
+        return jsonify({"message": "Error connecting to the database", "error": str(e)})
+
+
 # Route to handle login
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/api/login', methods=['POST'])
 def login():
     return user_controller.login_user()
 
-# Routes for different dashboards
-@app.route('/admin_dashboard')
-def admin_dashboard():
-    if 'user_role' in session and session['user_role'] == 'Admin':
-        return render_template('admin_dashboard.html')
+# Example endpoint for getting user data
+@app.route('/api/user_data', methods=['GET'])
+def user_data():
+    if 'user_id' in session:
+        # Example data to send back
+        return jsonify({
+            "user_id": session['user_id'],
+            "user_name": session['user_name'],
+            "user_role": session['user_role']
+        })
     else:
-        return redirect(url_for('login'))
-
-@app.route('/student_dashboard')
-def student_dashboard():
-    if 'user_role' in session and session['user_role'] == 'Student':
-        return render_template('student_dashboard.html')
-    else:
-        return redirect(url_for('login'))
-
-@app.route('/instructor_dashboard')
-def instructor_dashboard():
-    if 'user_role' in session and session['user_role'] == 'Instructor':
-        return render_template('instructor_dashboard.html')
-    else:
-        return redirect(url_for('login'))
+        return jsonify({"status": "error", "message": "User not logged in"}), 401
 
 # Start the Flask application
 if __name__ == "__main__":
