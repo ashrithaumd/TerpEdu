@@ -1,17 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Login() {
   const navigate = useNavigate();
+  const [userID, setUserID] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    navigate('/dash');
+
+    try {
+      // Make POST request to backend for login
+      const response = await axios.post('http://127.0.0.1:5000/api/login', {
+        UserID: userID,
+        password: password,
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+      const data = response.data;
+
+      // Redirect based on role
+      if (data.status === 'success') {
+        if (data.role === 'Admin') {
+          navigate('/admin_dashboard');
+        } else if (data.role === 'Student') {
+          navigate('/dash'); // Assuming '/dash' is the student dashboard path
+        } else if (data.role === 'Instructor') {
+          navigate('/instructor_dashboard');
+        } else {
+          console.error('No specific dashboard available for this role.');
+        }
+      } else {
+        console.error('Login failed:', data.message);
+      }
+    } catch (error) {
+      console.error('An error occurred during login:', error);
+    }
   };
 
   const handleSignup = (event) => {
     event.preventDefault();
-    console.log("signup button clicked");
     navigate('/signup');
   };
 
@@ -78,11 +110,11 @@ function Login() {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
             text-align: center;
-            transition: box-shadow 0.3s ease; /* Smooth transition */
+            transition: box-shadow 0.3s ease;
           }
 
           .login-box:hover {
-            box-shadow: 0 8px 16px rgba(0, 0, 255, 0.2); /* Intense blue shadow on hover */
+            box-shadow: 0 8px 16px rgba(0, 0, 255, 0.2);
           }
 
           .login-icons {
@@ -152,8 +184,22 @@ function Login() {
               <img src="maryland-logo.png" alt="Maryland Logo" className="icon" />
             </div>
             <form onSubmit={handleSubmit}>
-              <input type="text" name="UserID" placeholder="UserID" required />
-              <input type="password" name="password" placeholder="Password" required />
+              <input
+                type="text"
+                name="UserID"
+                placeholder="UserID"
+                value={userID}
+                onChange={(e) => setUserID(e.target.value)}
+                required
+              />
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
               <button type="submit" className="login-button">Login</button>
             </form>
             <button onClick={handleSignup} className="signup-button">Signup</button>

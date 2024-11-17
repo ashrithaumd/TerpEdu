@@ -6,7 +6,7 @@ class UserDao:
 
     def create_users(self, name, email, password, role):
         sql = """
-        INSERT INTO Users (Name, Email, Password, Role, DateCreated)
+        INSERT INTO users (Name, Email, Password, Role, DateCreated)
         VALUES (%s, %s, %s, %s, NOW());
         """
         params = (name, email, password, role)
@@ -36,14 +36,21 @@ class UserDao:
             return results
 
     def get_user(self, user_id):
-        sql = "SELECT * FROM Users WHERE UserID = %s"
+        sql = "SELECT * FROM users WHERE UserID = %s"
         params = [user_id]
         results = dao.execute_query(sql,fetch=True)
         return results
 
     def get_user_by_id_and_password(self, user_id, password):
-        # Modified function to use UserID and password for login
-        sql = "SELECT * FROM Users WHERE UserID = %s AND Password = %s"
-        params = (user_id, password)
-        results = dao.execute_query(sql,fetch=True)
-        return results
+  
+     sql = "SELECT * FROM users WHERE UserID = %s AND Password = %s"
+     params = (user_id, password)
+
+   
+     results = dao.execute_query(sql, params, fetch=True)
+     if results:
+         
+        return results[0]
+     else:
+        return None
+

@@ -28,33 +28,37 @@ class UserController:
 
     def login_user(self):
         if request.method == "POST":
-            # Extract data from the form
-            user_id = request.form['UserID']
-            password = request.form['password']
+            # Access data sent from the frontend as JSON
+            data = request.get_json()  # Use get_json() to parse JSON request data
+            
+            if not data or 'UserID' not in data or 'password' not in data:
+                return jsonify({"status": "error", "message": "Invalid data"}), 400
 
-            # Check user credentials
-            user = self._user_dao.get_user_by_userid_and_password(user_id, password)
+            user_id = data['UserID']
+            password = data['password']
+
+            # Your login logic here
+            user = self._user_dao.get_user_by_id_and_password(user_id, password)
+            if user:
+             print("User data fetched:", user)
+            else:
+              print("No user found with provided credentials.")
 
             if user:
+                # Assuming user role is at index 4
+                user_role = user[4]
+
                 # Store user information in session
                 session['user_id'] = user[0]
                 session['user_name'] = user[1]
-                session['user_role'] = user[4]  # Assuming role is stored at index 4
+                session['user_role'] = user_role
 
-                # Redirect based on user role
-                if user[4] == 'Admin':
-                    return redirect(url_for('admin_dashboard'))
-                elif user[4] == 'Student':
-                    return redirect(url_for('student_dashboard'))
-                elif user[4] == 'Instructor':
-                    return redirect(url_for('instructor_dashboard'))
-                else:
-                    return "Login successful for a user with no specific dashboard!"
-
+                # Send back the user role to frontend
+                return jsonify({"status": "success", "role": user_role})
             else:
-                return "Invalid UserID or password. Please try again."
-
-        return render_template("frontend/src/login.jsx")
+                return jsonify({"status": "error", "message": "Invalid UserID or password. Please try again."}), 401
+        
+        return jsonify({"status": "error", "message": "Only POST requests are allowed."}), 405
 
     def get_notifications(self):
         notifications = self._user_dao.get_all_notifications()

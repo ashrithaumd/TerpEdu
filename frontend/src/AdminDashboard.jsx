@@ -2,13 +2,13 @@ import React from 'react';
 
 function AdminDashboard() {
   return (
-    <div className="admin-dashboard">
+    <div className="admin_dashboard">
       <style>
         {`
           body {
             margin: 0;
-            width:10px;
             font-family: Arial, sans-serif;
+            background-color: #f0f2f5; /* Light grey background for entire page */
           }
 
           .header {
@@ -16,7 +16,7 @@ function AdminDashboard() {
             background-color: #d32f2f; /* Red color for header */
             color: white;
             padding: 20px;
-            font-size: 24px;
+            font-size: 28px;
             text-align: center;
             display: flex;
             align-items: center;
@@ -35,9 +35,14 @@ function AdminDashboard() {
             margin-right: 20px;
           }
 
+          .header-logo h1 {
+            font-size: 32px;
+          }
+
           .welcome-message {
             font-weight: bold;
             margin-right: 20px;
+            font-size: 20px;
           }
 
           .profile-icon {
@@ -48,38 +53,42 @@ function AdminDashboard() {
           }
 
           .dashboard-content {
-            background-color: #ffffff; /* White color for main content area */
-            padding: 30px;
-            min-height: calc(100vh - 100px);
+            padding: 40px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
           }
 
           .dashboard-card {
-            background-color: #f5f5f5;
-            padding: 20px;
+            background-color: #ffffff;
+            padding: 40px;
             margin: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            display: inline-block;
-            width: 200px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 300px;
             text-align: center;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.3s, box-shadow 0.3s;
           }
 
           .dashboard-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
           }
 
           .dashboard-card img {
-            width: 100px;
+            width: 120px;
             height: auto;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
           }
 
           .dashboard-card-title {
             font-weight: bold;
-            color: #d32f2f;
+            font-size: 22px;
+            color: #333;
           }
         `}
       </style>
@@ -96,7 +105,7 @@ function AdminDashboard() {
       <main className="dashboard-content">
         <div className="dashboard-card">
           <img
-            src="https://img.icons8.com/color/96/management.png"
+            src="https://img.icons8.com/color/120/management.png"
             alt="User Management"
           />
           <div className="dashboard-card-title">USER MANAGEMENT</div>
@@ -104,7 +113,7 @@ function AdminDashboard() {
 
         <div className="dashboard-card">
           <img
-            src="https://img.icons8.com/color/96/book-and-pencil.png"
+            src="https://img.icons8.com/color/120/book-and-pencil.png"
             alt="Course Management"
           />
           <div className="dashboard-card-title">COURSE MANAGEMENT</div>
@@ -112,7 +121,7 @@ function AdminDashboard() {
 
         <div className="dashboard-card">
           <img
-            src="https://img.icons8.com/color/96/megaphone.png"
+            src="https://img.icons8.com/color/120/megaphone.png"
             alt="Announcements and Alerts"
           />
           <div className="dashboard-card-title">ANNOUNCEMENTS AND ALERTS</div>
@@ -120,7 +129,7 @@ function AdminDashboard() {
 
         <div className="dashboard-card">
           <img
-            src="https://img.icons8.com/color/96/graph-report.png"
+            src="https://img.icons8.com/color/120/graph-report.png"
             alt="Reports"
           />
           <div className="dashboard-card-title">REPORTS</div>
@@ -128,7 +137,7 @@ function AdminDashboard() {
 
         <div className="dashboard-card">
           <img
-            src="https://img.icons8.com/color/96/settings.png"
+            src="https://img.icons8.com/color/120/settings.png"
             alt="System Settings"
           />
           <div className="dashboard-card-title">SYSTEM SETTINGS</div>
