@@ -29,28 +29,31 @@ class UserDao:
         dao.execute_query(sql, params)
 
     def get_all_notifications(self):
-            sql = """
-                SELECT * FROM notifications;
-                """
-            results = dao.execute_query(sql,fetch=True)
-            return results
+        sql = """
+        SELECT * FROM notifications;
+        """
+        results = dao.execute_query(sql, fetch=True)
+        return [dict(zip(result.keys(), result)) for result in results]
 
     def get_user(self, user_id):
         sql = "SELECT * FROM users WHERE UserID = %s"
         params = [user_id]
-        results = dao.execute_query(sql,fetch=True)
-        return results
+        results = dao.execute_query(sql, params, fetch=True)
+        return [dict(zip(result.keys(), result)) for result in results]
 
     def get_user_by_id_and_password(self, user_id, password):
-  
-     sql = "SELECT * FROM users WHERE UserID = %s AND Password = %s"
-     params = (user_id, password)
+        sql = "SELECT * FROM users WHERE UserID = %s AND Password = %s"
+        params = (user_id, password)
+        results = dao.execute_query(sql, params, fetch=True)
+    
+        if results:
+           return results[0]  # Returning the first result directly, as it was before
+        else:
+           return None
+       
+    def get_all_users(self):
+        sql = "SELECT UserID, Name, Email, Role, DateCreated FROM users;"
+        results = dao.execute_query(sql, fetch=True)
+        return results
 
-   
-     results = dao.execute_query(sql, params, fetch=True)
-     if results:
-         
-        return results[0]
-     else:
-        return None
-
+    

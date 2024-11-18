@@ -6,6 +6,8 @@ from model.student import User
 from model.admin import Enrollment, CourseInstructor
 from model.user import User, Profile, Notification
 from controller.user_controller import UserController
+from controller.course_controller import CourseController
+from controller.admin_controller import AdminController
 import os
 from flask_cors import CORS
 from sqlalchemy import text
@@ -31,18 +33,20 @@ migrate = Migrate(app, db)
 # Register blueprints for the routes
 from routes.course_route import course_bp
 from routes.student_route import student_bp
-from routes.admin_route import admin_bp
+
 from routes.user_route import user_bp
 from routes.inst_route import inst_bp
 
 app.register_blueprint(course_bp, url_prefix='/course')
 app.register_blueprint(student_bp, url_prefix='/student')
-app.register_blueprint(admin_bp, url_prefix='/admin')
+
 app.register_blueprint(user_bp, url_prefix='/user')
 app.register_blueprint(inst_bp, url_prefix='/inst')
 
-# Instantiate the UserController
+# Instantiate the Controllers
 user_controller = UserController()
+course_controller = CourseController()
+admin_controller= AdminController()
 
 # Serve React frontend
 @app.route('/', defaults={'path': ''})
@@ -52,8 +56,6 @@ def serve_react_app(path):
         return send_from_directory(app.static_folder, path)
     else:
         return send_from_directory(app.static_folder, 'index.html')
-
-        return jsonify({"message": "Error connecting to the database", "error": str(e)})
 
 
 # Route to handle login
@@ -73,6 +75,45 @@ def user_data():
         })
     else:
         return jsonify({"status": "error", "message": "User not logged in"}), 401
+    
+@app.route('/api/get_all_users', methods=['GET'])
+def get_all_users():
+    print("Endpoint '/api/get_all_users' was called")
+    return user_controller.get_all_users()
+
+# Route to handle assigning courses
+@app.route('/api/assign_courses', methods=['GET', 'POST'])
+def assign_courses():
+    if request.method == 'GET':
+        return course_controller.get_courses_for_assignment()
+    elif request.method == 'POST':
+        return course_controller.assign_courses_to_instructor()
+
+# Route to handle fetching all courses
+@app.route('/api/get_all_courses', methods=['GET'])
+def get_all_courses():
+    return course_controller.get_all_courses()
+
+@app.route('/api/get_active_courses', methods=['GET'])
+def get_active_courses():
+    course_controller = CourseController()
+    return course_controller.get_active_courses()
+
+@app.route('/api/get_instructors', methods=['GET'])
+def get_instructors():
+    course_controller = CourseController()
+    return course_controller.get_instructors()
+
+@app.route('/api/assign_instructors', methods=['POST'])
+def assign_instructors():
+    course_controller = CourseController()
+    return course_controller.assign_instructors()
+
+@app.route('/api/get_announcements', methods=['GET'])
+def get_announcements():
+    admin_controller= AdminController()
+    return admin_controller.get_announcements()
+
 
 # Start the Flask application
 if __name__ == "__main__":

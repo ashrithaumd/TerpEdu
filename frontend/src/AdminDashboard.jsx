@@ -1,6 +1,9 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function AdminDashboard() {
+  const navigate = useNavigate();
+
   return (
     <div className="admin_dashboard">
       <style>
@@ -8,12 +11,12 @@ function AdminDashboard() {
           body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #f0f2f5; /* Light grey background for entire page */
+            background-color: #f0f2f5; 
           }
 
           .header {
             width: 100%;
-            background-color: #d32f2f; /* Red color for header */
+            background-color: #d32f2f; 
             color: white;
             padding: 20px;
             font-size: 28px;
@@ -49,7 +52,7 @@ function AdminDashboard() {
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: url('https://via.placeholder.com/60') center/cover no-repeat; /* Replace with actual profile image */
+            background: url('https://via.placeholder.com/60') center/cover no-repeat;
           }
 
           .dashboard-content {
@@ -103,7 +106,7 @@ function AdminDashboard() {
       </header>
 
       <main className="dashboard-content">
-        <div className="dashboard-card">
+        <div className="dashboard-card" onClick={() => navigate('/user-management')}>
           <img
             src="https://img.icons8.com/color/120/management.png"
             alt="User Management"
@@ -111,7 +114,7 @@ function AdminDashboard() {
           <div className="dashboard-card-title">USER MANAGEMENT</div>
         </div>
 
-        <div className="dashboard-card">
+        <div className="dashboard-card" onClick={() => navigate('/course-management')}>
           <img
             src="https://img.icons8.com/color/120/book-and-pencil.png"
             alt="Course Management"
@@ -119,7 +122,7 @@ function AdminDashboard() {
           <div className="dashboard-card-title">COURSE MANAGEMENT</div>
         </div>
 
-        <div className="dashboard-card">
+        <div className="dashboard-card" onClick={() => navigate('/announcements-alerts')}>
           <img
             src="https://img.icons8.com/color/120/megaphone.png"
             alt="Announcements and Alerts"
@@ -127,7 +130,7 @@ function AdminDashboard() {
           <div className="dashboard-card-title">ANNOUNCEMENTS AND ALERTS</div>
         </div>
 
-        <div className="dashboard-card">
+        <div className="dashboard-card" onClick={() => navigate('/reports')}>
           <img
             src="https://img.icons8.com/color/120/graph-report.png"
             alt="Reports"
@@ -135,13 +138,7 @@ function AdminDashboard() {
           <div className="dashboard-card-title">REPORTS</div>
         </div>
 
-        <div className="dashboard-card">
-          <img
-            src="https://img.icons8.com/color/120/settings.png"
-            alt="System Settings"
-          />
-          <div className="dashboard-card-title">SYSTEM SETTINGS</div>
-        </div>
+        
       </main>
     </div>
   );
