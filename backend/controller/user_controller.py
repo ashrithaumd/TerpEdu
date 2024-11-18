@@ -1,6 +1,7 @@
-from flask import render_template, request, redirect, url_for, session, jsonify
+from flask import render_template,request,jsonify,session
 from dao.user_dao import UserDao
 from model.student import User
+import json
 
 class UserController:
     def __init__(self):
@@ -8,57 +9,27 @@ class UserController:
 
     def create_user(self):
         if request.method == "POST":
-            # Extract data from the form
-            UserID = request.form['UserID']
-            name = request.form['name']
-            email = request.form['email']
-            password = request.form['password']
-            role = request.form['role']
-            address = request.form['address']
-            phone_number = request.form['phone_number']
-            date_of_birth = request.form['date_of_birth']
+            # Handle JSON data
+            data = request.json
+            UserID = data.get('UserID')
+            name = data.get('name')
+            email = data.get('email')
+            password = data.get('password')
+            role = data.get('role')
+            address = data.get('address')
+            phone_number = data.get('phoneNumber')  # Use correct key based on React state
+            
+            # Create user and additional info in database
+            self._user_dao.create_users(UserID, name, email, password, role)
+            self._user_dao.additional_info_users(UserID, address, phone_number)
 
-            # Create user and add additional info
-            self._user_dao.create_users(name, email, password, role)
-            self._user_dao.additional_info_users(UserID, address, phone_number, date_of_birth)
-
-            return "User created successfully!"
-
-        return render_template("frontend/src/signup.jsx")
-
-    def login_user(self):
-        if request.method == "POST":
-            # Extract data from the form
-            user_id = request.form['UserID']
-            password = request.form['password']
-
-            # Check user credentials
-            user = self._user_dao.get_user_by_userid_and_password(user_id, password)
-
-            if user:
-                # Store user information in session
-                session['user_id'] = user[0]
-                session['user_name'] = user[1]
-                session['user_role'] = user[4]  # Assuming role is stored at index 4
-
-                # Redirect based on user role
-                if user[4] == 'Admin':
-                    return redirect(url_for('admin_dashboard'))
-                elif user[4] == 'Student':
-                    return redirect(url_for('student_dashboard'))
-                elif user[4] == 'Instructor':
-                    return redirect(url_for('instructor_dashboard'))
-                else:
-                    return "Login successful for a user with no specific dashboard!"
-
-            else:
-                return "Invalid UserID or password. Please try again."
-
-        return render_template("frontend/src/login.jsx")
+            return jsonify({"message": "User created successfully!"}), 201
+        
+        return jsonify({"error": "Invalid request method"}), 405
 
     def get_notifications(self):
         notifications = self._user_dao.get_all_notifications()
-
+    
         # Convert notifications to a suitable format for response (e.g., JSON)
         response = [
             {
@@ -68,6 +39,21 @@ class UserController:
             }
             for notification in notifications
         ]
-
+        
         return jsonify(response)
 
+    def login_user(self):
+        if request.method == "POST":
+            data = request.json
+            user_id = data.get('user_id')
+            password = data.get('password')
+            
+            # Authenticate user
+            user = self._user_dao.get_user_by_id_and_password(user_id, password)
+            if user:
+                # Parse user from JSON string to dictionary
+                user = json.loads(user)  # Convert JSON string to dictionary
+                session['user_id'] = user['user_id'] 
+                return jsonify({"message": "Login successful!"})
+            else:
+                return jsonify({"error": "Invalid credentials"}), 401

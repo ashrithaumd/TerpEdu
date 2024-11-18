@@ -18,7 +18,7 @@ class Profile(db.Model):
     UserID = db.Column(db.Integer, db.ForeignKey('users.UserID'), nullable=False)
     Address = db.Column(db.String(255))
     PhoneNumber = db.Column(db.String(20))
-    DateOfBirth = db.Column(db.Date)
+
 
 class Notification(db.Model):
     __tablename__ = 'notifications'

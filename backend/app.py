@@ -1,22 +1,29 @@
-from flask import Flask, render_template, send_from_directory, redirect, url_for, session, request,jsonify
+from flask import Flask, render_template, send_from_directory, jsonify
 from flask_migrate import Migrate
 from db import db  
 from model.course import Course, CourseMaterial
 from model.student import User
 from model.admin import Enrollment, CourseInstructor
 from model.user import User, Profile, Notification
-from controller.user_controller import UserController  # Import UserController for handling login
 import os
 from flask_cors import CORS
+from flask import Flask, session
+from flask_session import Session
+
+project_root = os.path.dirname(os.path.abspath(__file__))  # Get the absolute path to the backend directory
+frontend_build_path = os.path.join(project_root, '../frontend/build')
+UPLOAD_FOLDER = os.path.join(project_root, '../frontend/public/materials')
 
 # Initialize the Flask app
-app = Flask(__name__, static_folder='frontend/build', static_url_path='')
-CORS(app)
-
+app = Flask(__name__, static_folder=frontend_build_path, static_url_path='')
+CORS(app,supports_credentials=True)
+app.config['SECRET_KEY'] = 'da7bc86442a0cf44cc2aca2f5692d89e' 
+app.config['SESSION_TYPE'] = 'filesystem'  
+Session(app)
 # Configure the app
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/terpedu'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = 'your_secret_key'  # Required for using session management
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Initialize db with the app
 db.init_app(app)
@@ -37,44 +44,17 @@ app.register_blueprint(admin_bp, url_prefix='/admin')
 app.register_blueprint(user_bp, url_prefix='/user')
 app.register_blueprint(inst_bp, url_prefix='/inst')
 
-# Instantiate the UserController
-user_controller = UserController()
-
 # Serve React frontend
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_react_app(path):
-    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+    full_path = os.path.join(app.static_folder, path)
+    print(f"Requested path: {path}")
+    print(f"Full path: {full_path}")
+    if path != "" and os.path.exists(full_path):
         return send_from_directory(app.static_folder, path)
     else:
         return send_from_directory(app.static_folder, 'index.html')
-
-# Route to handle login
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    return user_controller.login_user()
-
-# Routes for different dashboards
-@app.route('/admin_dashboard')
-def admin_dashboard():
-    if 'user_role' in session and session['user_role'] == 'Admin':
-        return render_template('admin_dashboard.html')
-    else:
-        return redirect(url_for('login'))
-
-@app.route('/student_dashboard')
-def student_dashboard():
-    if 'user_role' in session and session['user_role'] == 'Student':
-        return render_template('student_dashboard.html')
-    else:
-        return redirect(url_for('login'))
-
-@app.route('/instructor_dashboard')
-def instructor_dashboard():
-    if 'user_role' in session and session['user_role'] == 'Instructor':
-        return render_template('instructor_dashboard.html')
-    else:
-        return redirect(url_for('login'))
 
 # Start the Flask application
 if __name__ == "__main__":
