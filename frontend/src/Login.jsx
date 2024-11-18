@@ -3,38 +3,48 @@ import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const navigate = useNavigate();
-  const [userId, setUserId] = useState('');
+  const [userID, setUserID] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Data to send to the backend
-    const loginData = {
-      user_id: userId,
-      password: password
-    };
-
     try {
-      const response = await fetch('http://localhost:5000/user/login', {
+      // Make POST request to backend for login using fetch
+      const response = await fetch('http://127.0.0.1:5000/user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(loginData)
+        body: JSON.stringify({
+          user_id: userID, // Ensure key matches what the backend expects
+          password: password
+        })
       });
 
-      const responseData = await response.json();
-      if (response.ok) {
-        alert('Login successful!');
-        // Redirect to the dashboard after successful login
-        navigate('/dash');
+      const data = await response.json();
+      console.log('Response data:', data); // Debug statement to inspect the response
+
+      if (data.status === 'success') {
+        console.log('User role:', data.role); // Debug statement to check the role
+        // Redirect based on role
+        if (data.role === 'Admin') {
+          navigate('/admin_dashboard');
+        } else if (data.role === 'Student') {
+          navigate('/student_dashboard');
+        } else if (data.role === 'Instructor') {
+          navigate('/instructor_dashboard');
+        } else {
+          console.error('No specific dashboard available for this role.');
+          alert('No specific dashboard available for this role.');
+        }
       } else {
-        alert(`Login failed: ${responseData.error || 'Unknown error'}`);
+        console.error('Login failed:', data.message);
+        alert('Login failed: ' + data.message); // Provide user feedback
       }
     } catch (error) {
-      console.error('Error during login:', error);
-      alert('An error occurred during login. Please try again.');
+      console.error('An error occurred during login:', error);
+      alert('An error occurred during login. Please try again.'); // Provide user feedback
     }
   };
 
@@ -149,23 +159,6 @@ function Login() {
             cursor: pointer;
             margin-top: 10px;
           }
-          
-          .side-image-container {
-            position: absolute;
-            top: -10px;
-            right: -500px;
-            width: 200px;
-            height: 200%;
-            overflow: hidden;
-            z-index: 0;
-          }
-
-          .side-image {
-            width: 560px;
-            height: auto;
-            position: relative;
-            left: -85px;
-          }
 
           .signup-button {
             width: 100%;
@@ -177,7 +170,6 @@ function Login() {
             border: none;
             border-radius: 5px;
           }
-
         `}
       </style>
 
@@ -200,13 +192,15 @@ function Login() {
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
-                placeholder="UserId"
-                value={userId}
-                onChange={(e) => setUserId(e.target.value)}
+                name="UserID"
+                placeholder="UserID"
+                value={userID}
+                onChange={(e) => setUserID(e.target.value)}
                 required
               />
               <input
                 type="password"
+                name="password"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -217,14 +211,6 @@ function Login() {
             <button onClick={handleSignup} className="signup-button">Signup</button>
           </div>
         </main>
-
-        <div className="side-image-container">
-          <img
-            src="https://media.istockphoto.com/id/1700535742/vector/turtle-icon.jpg?s=2048x2048&w=is&k=20&c=ZdczUpIyBaX2ymL9bs_i_SKQZUaEcogf4XdNPhB0Dbw="
-            alt="Side Turtle"
-            className="side-image"
-          />
-        </div>
       </div>
     </div>
   );

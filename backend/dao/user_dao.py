@@ -42,19 +42,24 @@ class UserDao:
     def get_user(self, user_id):
         sql = "SELECT * FROM Users WHERE UserID = %s"
         params = [user_id]
-        data = dao.execute_query(sql, params)        
-        return data[0]
+        data = dao.execute_query(sql, params, fetch=True)  # Ensure fetch=True to get results
+        
+        if data:  # Check if data is not None or empty
+            return data[0]
+        else:
+            return None
 
     def get_user_by_id_and_password(self, user_id, password):
         sql = "SELECT * FROM users WHERE UserID = %s AND Password = %s"
         params = (user_id, password)
         try:
+            print(f"Debug: Executing query with params {params}")  # Add debug statement
             result = dao.execute_query(sql, params, fetch=True)
+            print(f"Debug: Query result {result}")  # Add debug statement
             if result:
-                # Convert result to a dictionary and return it as JSON
                 user_data = {
-                    "user_id": result[0][0],  
-                    "password": result[0][3],    
+                    "user_id": result[0][0],
+                    "password": result[0][3]
                 }
                 return json.dumps(user_data)
             else:
@@ -62,3 +67,14 @@ class UserDao:
         except Exception as e:
             print(f"Error fetching user: {e}")
             return None
+
+    
+    def get_all_users(self):
+        sql = "SELECT UserID, Name, Email, Role, DateCreated FROM users;"
+        results = dao.execute_query(sql, fetch=True)
+        if results:
+            print(f"Debug: Retrieved users: {results}")  # Debug statement
+        else:
+            print("Debug: No users found.")
+        return results
+

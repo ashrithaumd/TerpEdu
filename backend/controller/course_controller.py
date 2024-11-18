@@ -57,14 +57,10 @@ class CourseController:
             return jsonify({"error": f"Failed to upload file or save record: {str(e)}"}), 500
 
         
-    def get_material(self):
+    def get_material(self,user_id):
         try:
-            user_id = session.get('user_id')
-            if not user_id:
-                return jsonify({"error": "User not logged in"}), 401
-
-            # Retrieve course materials for the specified user from the DAO
             materials = self._course_dao.get_course_materials_by_user(user_id)
+            print("course_controller", materials)
             
             if not materials:
                 return jsonify({"message": "No materials found for the specified user."}), 404
@@ -82,4 +78,58 @@ class CourseController:
 
             return jsonify(formatted_materials), 200
         except Exception as e:
+            print(f"Error occurred: {e}")  # Log the error for debugging
             return jsonify({"error": f"Failed to retrieve materials: {str(e)}"}), 500
+    
+    def get_all_courses(self):
+        courses = self._course_dao.get_all_courses()
+
+        if courses:
+            response = [
+                {
+                    "CourseName": course[0],
+                    "Instructor": course[1],
+                    "Department": course[2],
+                    "NumberOfStudents": course[3],
+                }
+                for course in courses
+            ]
+            return jsonify(response)
+        else:
+            return jsonify({"message": "No courses found"}), 404
+        
+    
+    def get_active_courses(self):
+        try:
+            courses = self._course_dao.get_active_courses()
+            response = [
+                {
+                    "CourseID": course[0],
+                    "CourseName": course[1],
+                    "InstructorID": course[2],
+                    "InstructorName": course[3],
+                }
+                for course in courses
+            ]
+            return jsonify(response), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+    def get_instructors(self):
+      try:
+        instructors =self._course_dao.get_instructors()
+        return jsonify(instructors), 200
+      except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+   
+    def assign_instructors(self):
+      try:
+        assignments = request.json
+        self._course_dao.assign_instructors(assignments)
+        return jsonify({'message': 'Courses updated successfully'}), 200
+      except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+
+        

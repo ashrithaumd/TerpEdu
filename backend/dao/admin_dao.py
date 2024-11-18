@@ -12,10 +12,29 @@ class AdminDao:
         params = (user_id, course_id, status)
         dao.execute_query(sql, params)
     
-    def assign_course(self, course_id, instructor_id):
+
+    def get_announcements(self):
         sql = """
-        INSERT INTO course_instructors (course_id, instructor_id)
-        VALUES (%s, %s);
-        """
-        params = (course_id, instructor_id)
-        dao.execute_query(sql, params)
+    SELECT 
+    a.course_id, 
+    c.course_name, 
+    a.announcement, 
+    a.date_posted
+FROM 
+    announcements a
+INNER JOIN 
+    courses c ON a.course_id = c.course_id
+ORDER BY 
+    a.date_posted DESC;
+
+    """
+        results = dao.execute_query(sql, fetch=True)
+        return [
+            {
+                "CourseID": result[0],
+                "CourseName": result[1],
+                "Announcement": result[2],
+                "DatePosted": result[3].strftime('%Y-%m-%d %H:%M:%S')
+            }
+            for result in results
+        ]

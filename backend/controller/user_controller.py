@@ -47,13 +47,35 @@ class UserController:
             data = request.json
             user_id = data.get('user_id')
             password = data.get('password')
-            
+
             # Authenticate user
             user = self._user_dao.get_user_by_id_and_password(user_id, password)
             if user:
-                # Parse user from JSON string to dictionary
-                user = json.loads(user)  # Convert JSON string to dictionary
-                session['user_id'] = user['user_id'] 
-                return jsonify({"message": "Login successful!"})
+                user = json.loads(user)  # Convert JSON string to a dictionary
+                session['user_id'] = user['user_id']
+
+                # Assuming you have a method to retrieve the role from the user data
+                user_data = self._user_dao.get_user(user_id)  # Get full user data, including the role
+                role = user_data[4]  # Assuming the role is at index 4 in the returned tuple
+
+                # Return a JSON response with status and role
+                return jsonify({"status": "success", "role": role})
             else:
-                return jsonify({"error": "Invalid credentials"}), 401
+                return jsonify({"status": "failed", "message": "Invalid credentials"}), 401
+            
+    def get_all_users(self):
+        users = self._user_dao.get_all_users()
+        if users:
+            response=[
+                {
+                    "UserID": user[0],
+                    "Name": user[1],
+                    "Email":user[2],
+                    "Role": user[3],
+                    "DateCreated":user[4].strftime('%Y-%m-%d %H:%M:%S')
+                }
+                for user in users
+            ]
+            return jsonify(response)
+        else:
+            return jsonify({"error": "No users found"}), 404

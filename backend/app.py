@@ -55,6 +55,17 @@ def serve_react_app(path):
         return send_from_directory(app.static_folder, path)
     else:
         return send_from_directory(app.static_folder, 'index.html')
+    
+@app.route('/api/user_data',methods=['GET'])
+def user_data():
+    if 'user_id' in session:
+        return jsonify({
+            "user_id":session['user_id'],
+            "user_name":session['user_name'],
+            "user_role":session['user_role']
+        })
+    else:
+        return jsonify({"status":"error","message":"User not logged in"}),401
 
 # Start the Flask application
 if __name__ == "__main__":
