@@ -1,17 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const navigate = useNavigate();
+  const [userId, setUserId] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    navigate('/dash');
+
+    // Data to send to the backend
+    const loginData = {
+      user_id: userId,
+      password: password
+    };
+
+    try {
+      const response = await fetch('http://localhost:5000/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(loginData)
+      });
+
+      const responseData = await response.json();
+      if (response.ok) {
+        alert('Login successful!');
+        // Redirect to the dashboard after successful login
+        navigate('/dash');
+      } else {
+        alert(`Login failed: ${responseData.error || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+      alert('An error occurred during login. Please try again.');
+    }
   };
 
   const handleSignup = (event) => {
     event.preventDefault();
-    console.log("signup button clicked");
     navigate('/signup');
   };
 
@@ -78,11 +106,11 @@ function Login() {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
             text-align: center;
-            transition: box-shadow 0.3s ease; /* Smooth transition */
+            transition: box-shadow 0.3s ease;
           }
 
           .login-box:hover {
-            box-shadow: 0 8px 16px rgba(0, 0, 255, 0.2); /* Intense blue shadow on hover */
+            box-shadow: 0 8px 16px rgba(0, 0, 255, 0.2);
           }
 
           .login-icons {
@@ -121,6 +149,23 @@ function Login() {
             cursor: pointer;
             margin-top: 10px;
           }
+          
+          .side-image-container {
+            position: absolute;
+            top: -10px;
+            right: -500px;
+            width: 200px;
+            height: 200%;
+            overflow: hidden;
+            z-index: 0;
+          }
+
+          .side-image {
+            width: 560px;
+            height: auto;
+            position: relative;
+            left: -85px;
+          }
 
           .signup-button {
             width: 100%;
@@ -132,6 +177,7 @@ function Login() {
             border: none;
             border-radius: 5px;
           }
+
         `}
       </style>
 
@@ -152,13 +198,33 @@ function Login() {
               <img src="maryland-logo.png" alt="Maryland Logo" className="icon" />
             </div>
             <form onSubmit={handleSubmit}>
-              <input type="text" name="UserID" placeholder="UserID" required />
-              <input type="password" name="password" placeholder="Password" required />
+              <input
+                type="text"
+                placeholder="UserId"
+                value={userId}
+                onChange={(e) => setUserId(e.target.value)}
+                required
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
               <button type="submit" className="login-button">Login</button>
             </form>
             <button onClick={handleSignup} className="signup-button">Signup</button>
           </div>
         </main>
+
+        <div className="side-image-container">
+          <img
+            src="https://media.istockphoto.com/id/1700535742/vector/turtle-icon.jpg?s=2048x2048&w=is&k=20&c=ZdczUpIyBaX2ymL9bs_i_SKQZUaEcogf4XdNPhB0Dbw="
+            alt="Side Turtle"
+            className="side-image"
+          />
+        </div>
       </div>
     </div>
   );

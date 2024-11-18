@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
 function Signup() {
   const navigate = useNavigate();
@@ -10,8 +10,7 @@ function Signup() {
     password: '',
     role: '',
     address: '',
-    phoneNumber: '',
-    dateOfBirth: ''
+    phoneNumber: ''
   });
 
   const handleChange = (e) => {
@@ -34,11 +33,10 @@ function Signup() {
       });
 
       if (response.ok) {
-        // Handle successful signup (e.g., navigate to login page)
         navigate('/');
       } else {
-        // Handle errors here
-        console.error('Signup failed');
+        const errorData = await response.json();
+        console.error('Signup failed:', errorData);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -108,11 +106,11 @@ function Signup() {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
             text-align: center;
-            transition: box-shadow 0.3s ease; /* Smooth transition */
+            transition: box-shadow 0.3s ease;
           }
 
           .login-box:hover {
-            box-shadow: 0 8px 16px rgba(0, 0, 255, 0.2); /* Intense blue shadow on hover */
+            box-shadow: 0 8px 16px rgba(0, 0, 255, 0.2);
           }
 
           .login-icons {
@@ -177,7 +175,7 @@ function Signup() {
       <div className="login-container">
         <main className="main">
           <div className="logo">
-            <img src="./frontend/public/TerpEdu.png" alt="TerpEdu Logo" />
+            <img src="/TerpEdu.png" alt="TerpEdu Logo" />
           </div>
           <div className="login-box">
             <h1>SIGN UP</h1>
@@ -237,18 +235,10 @@ function Signup() {
               />
               <input
                 type="tel"
-                name="phone_number"
+                name="phoneNumber"
                 placeholder="Phone Number"
                 required
-                value={formData.phone_number}
-                onChange={handleChange}
-              />
-              <input
-                type="date"
-                name="date_of_birth"
-                placeholder="Date of Birth"
-                required
-                value={formData.date_of_birth}
+                value={formData.phoneNumber}
                 onChange={handleChange}
               />
               <button type="submit" className="login-button">Sign Up</button>

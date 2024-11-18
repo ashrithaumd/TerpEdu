@@ -3,9 +3,11 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './Login'; 
 import Dash from './Dash';
 import Signup from './Signup';
-import AdminDashboard from './AdminDashboard';
 import Inbox from './inbox';
-import ViewInstCourses from './View_inst_courses';
+import GetCourse from './get_course';
+import PostAnnouncement from './announcements';
+import UploadedMaterials from './uploaded_materials';
+
 
 function App() {
   return (
@@ -15,8 +17,11 @@ function App() {
         <Route path="/dash" element={<Dash />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/inbox" element={<Inbox />} />
-        <Route path="/View_inst_courses" element={<ViewInstCourses />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/inbox" element={<Inbox />} />
+        <Route path="/announcements" element={<PostAnnouncement />} />
+        <Route path="/uploaded_materials" element={<UploadedMaterials />} />
+        <Route path="/get_course/:courseId/:name/:description/:department/:instructorId" element={<GetCourse />} />
+
       </Routes>
     </Router>
   );

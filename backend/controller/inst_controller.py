@@ -18,3 +18,21 @@ class InstController:
         ]
         # print(response)
         return response
+    
+    def post_announcement(self):
+        if request.method == "POST":
+            data = request.json
+            course_id = data.get('course_id')
+            user_id = data.get('user_id')  
+            announcement = data.get('announcement')
+            if not course_id or not user_id or not announcement:
+                return jsonify({"error": "Missing required fields"}), 400
+
+            try:
+                response = self._inst_dao.post_announcements(course_id, user_id, announcement)
+                if "message" in response:
+                    return jsonify({"message": response["message"]}), 201
+                else:
+                    return jsonify({"error": response["error"]}), 500
+            except Exception as e:
+                return jsonify({"error": str(e)}), 500

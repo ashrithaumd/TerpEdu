@@ -6,7 +6,7 @@ formatter = logging.Formatter(
 )
 logger = logging.getLogger("terpedu-logger")
 
-logHandler = handlers.TimedRotatingFileHandler("logs/terpedu.log", when="h", interval=1)
+logHandler = handlers.TimedRotatingFileHandler("logs/bales.log", when="h", interval=1)
 logHandler.setLevel(logging.DEBUG)
 logHandler.setFormatter(formatter)
 logger.addHandler(logHandler)
