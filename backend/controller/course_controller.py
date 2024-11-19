@@ -161,10 +161,11 @@ class CourseController:
         if courses:
             response = [
                 {
-                    "CourseName": course[0],
-                    "Instructor": course[1],
-                    "Department": course[2],
-                    "NumberOfStudents": course[3],
+                    "course_name": course[0],
+                    "course_instructor": course[1],
+                    "course_department": course[2],
+                    "course_no_of_students": course[3],
+                    "course_id": course[4]
                 }
                 for course in courses
             ]

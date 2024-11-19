@@ -42,7 +42,14 @@ class StudentController:
 
         try:
             courses = self._student_dao.get_enrolled_courses(user_id)
-            return jsonify(courses), 200
+            response = [
+                {
+                    "course_id": course[0],
+                    "course_name": course[1]
+                }
+                for course in courses
+            ]
+            return jsonify(response), 200
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 

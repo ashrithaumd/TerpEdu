@@ -31,7 +31,7 @@ const CourseManagement = () => {
       {/* Header with logo and welcome message */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', backgroundColor: '#c0392b', padding: '20px', color: 'white' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <img src="/path/to/logo.png" alt="TerpEdu Logo" style={{ height: '50px', marginRight: '20px' }} />
+          <img src="/TerpEdu.png" alt="TerpEdu Logo" style={{ height: '50px', marginRight: '20px' }} />
           <h1>Course Management</h1>
         </div>
         <h2>Hi {sessionStorage.getItem('user_name')}, Welcome back!</h2>
@@ -49,21 +49,21 @@ const CourseManagement = () => {
           </thead>
           <tbody>
             {courses.length > 0 ? (
-              courses.map((course, index) => (
-                <tr key={index} style={{ textAlign: 'center' }}>
+              courses.map((course) => (
+                <tr key={course.course_id} style={{ textAlign: 'center' }}>
                   {/* Display course details */}
-                  <td style={{ padding: '16px', borderBottom: '1px solid #ddd' }}>{course.CourseName}</td>
+                  <td style={{ padding: '16px', borderBottom: '1px solid #ddd' }}>{course.course_name}</td>
                   <td style={{ padding: '16px', borderBottom: '1px solid #ddd' }}>
-                    {course.Instructor ? (
-                      course.Instructor
+                    {course.course_instructor ? (
+                      course.course_instructor
                     ) : (
                       <span style={{ color: 'red' }}>Instructor Yet To Be Assigned</span>
                     )}
                   </td>
-                  <td style={{ padding: '16px', borderBottom: '1px solid #ddd' }}>{course.Department}</td>
+                  <td style={{ padding: '16px', borderBottom: '1px solid #ddd' }}>{course.course_department}</td>
                   <td style={{ padding: '16px', borderBottom: '1px solid #ddd' }}>
-                    {course.NumberOfStudents > 0 ? (
-                      course.NumberOfStudents
+                    {course.course_no_of_students > 0 ? (
+                      course.course_no_of_students
                     ) : (
                       <span style={{ color: 'red' }}>Not Yet Open</span>
                     )}

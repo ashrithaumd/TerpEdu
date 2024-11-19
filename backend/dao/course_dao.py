@@ -56,7 +56,8 @@ class CourseDao:
             c.course_name, 
             u.Name AS instructor_name, 
             c.department, 
-            COUNT(e.UserID) AS num_students
+            COUNT(e.UserID) AS num_students,
+            c.course_id
         FROM 
             courses c
         LEFT JOIN 

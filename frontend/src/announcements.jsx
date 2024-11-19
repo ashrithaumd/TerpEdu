@@ -1,10 +1,34 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 function PostAnnouncement() {
   // State hooks for managing form input values
   const [courseId, setCourseId] = useState('');
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState(localStorage.getItem("user_id"));
+  const [role, setRole] = useState(localStorage.getItem("role"));
   const [announcement, setAnnouncement] = useState('');
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
+
+  useEffect(() => {
+    const fetchEnrolledCourses = async () => {
+      let url = role === 'Student' ? `/student/get_enrolled_courses?user_id=${userId}` : `/inst/get_courses_by_inst/${userId}`;
+      if (role === 'Admin') {
+        url = `/course/get_all_courses`;
+      }
+      try {
+        const response = await fetch(url);
+        if (response.ok) {
+          const data = await response.json();
+          setEnrolledCourses(data);
+        } else {
+          console.error('Failed to fetch enrolled courses.');
+        }
+      } catch (error) {
+        console.error('Error fetching enrolled courses:', error);
+      }
+    };
+
+    fetchEnrolledCourses();
+  }, [userId]);
 
   // Handles the form submission event
   const handleSubmit = async (e) => {
@@ -177,36 +201,32 @@ function PostAnnouncement() {
             <h2>Post an Announcement</h2>
             {/* Form for posting an announcement */}
             <form onSubmit={handleSubmit} className="form-container">
-              <div style={{ marginBottom: '15px' }}>
+              <div style={{marginBottom: '15px'}}>
                 <label htmlFor="course_id">Course ID</label>
-                <input
-                  type="text"
-                  id="course_id"
-                  value={courseId}
-                  onChange={(e) => setCourseId(e.target.value)}
-                  required
-                />
+                <select
+                    id="course_id"
+                    className="form-input"
+                    value={courseId}
+                    onChange={(e) => setCourseId(e.target.value)}
+                    required
+                >
+                  <option value="" disabled>Select a course</option>
+                  {enrolledCourses.map(course => (
+                      <option key={course.course_id} value={course.course_id}>
+                        {course.course_id} - {course.course_name}
+                      </option>
+                  ))}
+                </select>
               </div>
 
-              <div style={{ marginBottom: '15px' }}>
-                <label htmlFor="user_id">User ID</label>
-                <input
-                  type="text"
-                  id="user_id"
-                  value={userId}
-                  onChange={(e) => setUserId(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div style={{ marginBottom: '15px' }}>
+              <div style={{marginBottom: '15px'}}>
                 <label htmlFor="announcement">Announcement</label>
                 <textarea
-                  id="announcement"
-                  value={announcement}
-                  onChange={(e) => setAnnouncement(e.target.value)}
-                  required
-                  rows="4"
+                    id="announcement"
+                    value={announcement}
+                    onChange={(e) => setAnnouncement(e.target.value)}
+                    required
+                    rows="4"
                 ></textarea>
               </div>
 

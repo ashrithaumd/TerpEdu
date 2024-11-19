@@ -17,12 +17,12 @@ class InstController:
         result = self._inst_dao.fetch_courses_for_instructor(instructor_id)
         response = [
             {
-                "course_ID": i[0],
-                "name": i[1],
-                "description": i[2],
-                "department": i[3]
+                "course_id": course[0],
+                "course_name": course[1],
+                "course_description": course[2],
+                "course_department": course[3],
             }
-            for i in result
+            for course in result
         ]
         # Return the list of courses formatted as a response
         return response

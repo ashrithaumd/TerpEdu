@@ -24,6 +24,7 @@ function Login() {
       const data = await response.json();
       if (data.status === 'success') {
         localStorage.setItem("user_id", data.user_id);
+        localStorage.setItem("role", data.role);
         if (data.role === 'Admin') {
           navigate(`/admin_dashboard/${encodeURIComponent(data.user_name)}`);
         } else if (data.role === 'Student') {

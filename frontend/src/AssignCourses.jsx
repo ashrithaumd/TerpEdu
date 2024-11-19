@@ -9,7 +9,7 @@ function AssignCourses() {
     // Fetch active courses from the backend
     const fetchCourses = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:5000/course/get_active_courses");
+        const response = await fetch("/course/get_active_courses");
         if (response.ok) {
           const data = await response.json();
           setCourses(data);
@@ -31,7 +31,7 @@ function AssignCourses() {
     // Fetch available instructors from the backend
     const fetchInstructors = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:5000/course/get_instructors");
+        const response = await fetch("/course/get_instructors");
         if (response.ok) {
           const data = await response.json();
           setInstructors(data);
@@ -59,7 +59,7 @@ function AssignCourses() {
   // Handle saving instructor assignments for selected courses
   const handleSave = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:5000/course/assign_instructors", {
+      const response = await fetch("/course/assign_instructors", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

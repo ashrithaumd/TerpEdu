@@ -1,43 +1,62 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
-function UploadedMaterials() {
-  const [materials, setMaterials] = useState([]);
-  const [course_id, setCourseId] = useState('');
-  const [submittedCourseId, setSubmittedCourseId] = useState(null);
-  const [selectedFile, setSelectedFile] = useState('');
+function UploadedMaterialsStudent() {
+    const [materials, setMaterials] = useState([]);
+    const [course_id, setCourseId] = useState('');
+    const [userId, setUserId] = useState(localStorage.getItem('user_id'));
+    const [selectedFile, setSelectedFile] = useState('');
+    const [enrolledCourses, setEnrolledCourses] = useState([]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setSubmittedCourseId(course_id);
+    useEffect(() => {
+        const fetchEnrolledCourses = async () => {
+            let url = `/student/get_enrolled_courses?user_id=${userId}`;
+            try {
+                const response = await fetch(url);
+                if (response.ok) {
+                    const data = await response.json();
+                    setEnrolledCourses(data);
+                } else {
+                    console.error('Failed to fetch enrolled courses.');
+                }
+            } catch (error) {
+                console.error('Error fetching enrolled courses:', error);
+            }
+        };
+        fetchEnrolledCourses();
+    }, [userId]);
 
-    try {
-      const response = await fetch(`/course/get_uploaded_materials_for_student/${course_id}`, {
-        method: 'GET',
-        credentials: 'include'
-      });
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setCourseId(course_id);
 
-      if (response.ok) {
-        const data = await response.json();
-        setMaterials(data);
-      } else {
-        console.error('Failed to fetch materials');
-      }
-    } catch (error) {
-      console.error('Error fetching materials:', error);
-    }
-  };
+        try {
+            const response = await fetch(`/course/get_uploaded_materials_for_student/${course_id}`, {
+                method: 'GET',
+                credentials: 'include'
+            });
 
-  const handleViewFile = (filePath) => {
-    let normalizedPath = filePath.replace(/\\/g, '/');
-    if (!normalizedPath.startsWith('/materials/')) {
-      normalizedPath = `/materials/${normalizedPath.replace(/^.*\/materials\//, '')}`;
-    }
-    setSelectedFile(normalizedPath);
-  };
+            if (response.ok) {
+                const data = await response.json();
+                setMaterials(data);
+            } else {
+                console.error('Failed to fetch materials');
+            }
+        } catch (error) {
+            console.error('Error fetching materials:', error);
+        }
+    };
 
-  return (
-    <div>
-      <style>{`
+    const handleViewFile = (filePath) => {
+        let normalizedPath = filePath.replace(/\\/g, '/');
+        if (!normalizedPath.startsWith('/materials/')) {
+            normalizedPath = `/materials/${normalizedPath.replace(/^.*\/materials\//, '')}`;
+        }
+        setSelectedFile(normalizedPath);
+    };
+
+    return (
+        <div>
+            <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400&display=swap');
 
         body {
@@ -182,74 +201,78 @@ function UploadedMaterials() {
         }
       `}</style>
 
-      <header className="header">
-        <h1>TerpEdu</h1>
-        <h2>Student Dashboard</h2>
-      </header>
+            <header className="header">
+                <h1>TerpEdu</h1>
+                <h2>Student Dashboard</h2>
+            </header>
 
-      <div className="main-container">
-        <div className="content-box">
-          <h2 className="title">Uploaded Materials</h2>
-          <p className="subtitle">View the uploaded material for Course ID:</p>
-          <div className="form-container">
-            <form onSubmit={handleSubmit}>
-              <input
-                type="text"
-                id="course_id"
-                value={course_id}
-                onChange={(e) => setCourseId(e.target.value)}
-                placeholder="Enter Course ID"
-                className="input-field"
-                required
-              />
-              <button type="submit" className="button">Fetch Materials</button>
-            </form>
-          </div>
+            <div className="main-container">
+                <div className="content-box">
+                    <h2 className="title">Uploaded Materials</h2>
+                    <p className="subtitle">View the uploaded material for Course ID:</p>
+                    <div className="form-container">
+                        <form onSubmit={handleSubmit}>
+                            <label htmlFor="course_id">Course ID</label>
+                            <select
+                                id="course_id"
+                                className="form-input"
+                                value={course_id}
+                                onChange={(e) => setCourseId(e.target.value)}
+                                required
+                            >
+                                <option value="" disabled>Select a course</option>
+                                {enrolledCourses.map(course => (
+                                    <option key={course.course_id} value={course.course_id}>
+                                        {course.course_id} - {course.course_name}
+                                    </option>
+                                ))}
+                            </select>
+                            <button type="submit" className="button">Fetch Materials</button>
+                        </form>
+                    </div>
 
-          {submittedCourseId && (
-            <div className="materials-container">
-              <h3 className="materials-heading">Materials for Course ID: {submittedCourseId}</h3>
-              {materials.length === 0 ? (
-                <p>No materials available.</p>
-              ) : (
-                <ul style={{ listStyleType: 'none', padding: 0 }}>
-                  {materials.map((material) => (
-                    <li key={material.id} className="material-item">
-                      <span>{material.title}</span>
-                      <button
-                        onClick={() => handleViewFile(material.file_path)}
-                        className="view-button"
-                      >
-                        View File
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
+                    <div className="materials-container">
+                        <h3 className="materials-heading">Materials for Course ID: {course_id}</h3>
+                        {materials.length === 0 ? (
+                            <p>No materials available.</p>
+                        ) : (
+                            <ul style={{listStyleType: 'none', padding: 0}}>
+                                {materials.map((material) => (
+                                    <li key={material.id} className="material-item">
+                                        <span>{material.title}</span>
+                                        <button
+                                            onClick={() => handleViewFile(material.file_path)}
+                                            className="view-button"
+                                        >
+                                            View File
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+
+                    {selectedFile && (
+                        <div className="file-viewer">
+                            <h3>Viewing File</h3>
+                            <p>{selectedFile}</p>
+                            <iframe
+                                src={selectedFile}
+                                title="File Viewer"
+                                width="100%"
+                                height="600px"
+                                style={{border: '1px solid #ccc'}}
+                            />
+                        </div>
+                    )}
+                </div>
             </div>
-          )}
 
-          {selectedFile && (
-            <div className="file-viewer">
-              <h3>Viewing File</h3>
-              <p>{selectedFile}</p>
-              <iframe
-                src={selectedFile}
-                title="File Viewer"
-                width="100%"
-                height="600px"
-                style={{ border: '1px solid #ccc' }}
-              />
+            <div className="turtle-container">
+                <img src="/turtle.png" alt="Turtle" className="turtle-image"/>
             </div>
-          )}
         </div>
-      </div>
-
-      <div className="turtle-container">
-        <img src="/turtle.png" alt="Turtle" className="turtle-image" />
-      </div>
-    </div>
-  );
+    );
 }
 
-export default UploadedMaterials;
+export default UploadedMaterialsStudent;

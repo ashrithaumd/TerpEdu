@@ -70,7 +70,7 @@ function sendMessage() {
 
         // Simulate delay for chatbot response
         setTimeout(() => {
-            fetch("http://127.0.0.1:5000/chatbot/get_answer", {
+            fetch("/chatbot/get_answer", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ question: userInput })

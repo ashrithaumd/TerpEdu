@@ -57,12 +57,12 @@ function Signup() {
     // Dynamically load CSS for the chatbot
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/chatbot.css";
+    link.href = "./chatbot/chatbot.css";
     document.head.appendChild(link);
 
     // Dynamically load JS for the chatbot
     const script = document.createElement("script");
-    script.src = "/chatbot.js";
+    script.src = "./chatbot/chatbot.js";
     script.async = true;
 
     // Ensure the script is only executed after it has loaded

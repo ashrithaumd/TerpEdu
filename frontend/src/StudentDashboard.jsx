@@ -13,6 +13,7 @@ function StudentDashboard() {
   const [error, setError] = useState("");
   const [selectedCourse, setSelectedCourse] = useState("");
   const [showChatbot, setShowChatbot] = useState(false); // Chatbot visibility state
+    const [dropdownVisible, setDropdownVisible] = useState(false); // State for dropdown visibility
 
   // Navigate to a new path
   const handleNavigation = (path) => {
@@ -55,9 +56,9 @@ function StudentDashboard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_id: userID, course_id: selectedCourse }),
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok && data.status === "success") {
         alert(data.message || "Course added successfully!");
         fetchDashboardData();
@@ -70,7 +71,7 @@ function StudentDashboard() {
       alert(error.message || "Failed to add course. Please try again.");
     }
   };
-  
+
 
   const handleDropCourse = async () => {
     if (!selectedCourse) {
@@ -109,12 +110,12 @@ function StudentDashboard() {
     // Dynamically load CSS for the chatbot
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/chatbot.css";
+    link.href = "/chatbot/chatbot.css";
     document.head.appendChild(link);
 
     // Dynamically load JS for the chatbot
     const script = document.createElement("script");
-    script.src = "/chatbot.js";
+    script.src = "/chatbot/chatbot.js";
     script.async = true;
 
     // Ensure the script is only executed after it has loaded
@@ -166,8 +167,17 @@ function StudentDashboard() {
       };
     }, [showChatbot]);
 
+  const handleProfileClick = () => {
+    setDropdownVisible(!dropdownVisible); // Toggle the dropdown visibility
+  };
+
+  const handleLogout = () => {
+    console.log('Logging out');
+    navigate('/'); // Example of redirecting to login page
+  };
+
   return (
-    <div style={{ padding: "20px" }}>
+    <div>
       <style>
         {`
           body {
@@ -180,7 +190,6 @@ function StudentDashboard() {
             width: 100%;
             background-color: #D32F2F;
             color: white;
-            padding: 15px 20px;
             font-size: 28px;
             text-align: left;
             display: flex;
@@ -225,7 +234,7 @@ function StudentDashboard() {
             position: absolute;
             right: 0;
             bottom: 0;
-            max-height: calc(100vh - 80px);
+            max-height: calc(90vh - 80px);
             max-width: 350px;
             opacity: 0.5;
           }
@@ -306,16 +315,24 @@ function StudentDashboard() {
         `}
       </style>
 
-      <header className="header">
-        <span>TerpEdu</span>
-        <span>Student Dashboard</span>
-        <span>Welcome, {user_name}</span>
-      </header>
-      <div className="navbar">
-          <span onClick={() => handleNavigation('/inbox')}>Inbox</span>
-          <span onClick={() => handleNavigation('/inst_announcements')}>Announcements</span>
-          <span onClick={() => handleNavigation('/uploaded_materials')}>Uploaded materials</span>
-          {/* <span onClick={() => handleNavigation('/view_enrolled_students')}>View enrolled students</span> */}
+        <header className="header">
+            <h1>TerpEdu</h1>
+            <h2>Student Dashboard</h2>
+            <span>Welcome, {user_name}</span>
+            <div className="profile-icon" onClick={handleProfileClick}>
+                👤
+                {dropdownVisible && (
+                    <div className="dropdown">
+                        <button onClick={handleLogout}>Logout</button>
+                    </div>
+                )}
+            </div>
+        </header>
+        <div className="navbar">
+            <span onClick={() => handleNavigation('/inbox')}>Inbox</span>
+            <span onClick={() => handleNavigation('/inst_announcements')}>Announcements</span>
+            <span onClick={() => handleNavigation('/uploaded_materials_student')}>Uploaded materials</span>
+            {/* <span onClick={() => handleNavigation('/view_enrolled_students')}>View enrolled students</span> */}
         </div>
 
       <div className="logo-container">

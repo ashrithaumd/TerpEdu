@@ -1,10 +1,36 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 function Inbox() {
   const [notifications, setNotifications] = useState([]);
+  const [userId, setUserId] = useState(localStorage.getItem("user_id"));
+  const [role, setRole] = useState(localStorage.getItem("role"));
   const [courseId, setCourseId] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
+
+  useEffect(() => {
+    const fetchEnrolledCourses = async () => {
+      let url = role === 'Student' ? `/student/get_enrolled_courses?user_id=${userId}` : `/inst/get_courses_by_inst/${userId}`;
+      if (role === 'Admin') {
+        url = `/course/get_all_courses`;
+      }
+      try {
+        const response = await fetch(url);
+        if (response.ok) {
+          const data = await response.json();
+          setEnrolledCourses(data);
+        } else {
+          console.error('Failed to fetch enrolled courses.');
+        }
+      } catch (error) {
+        console.error('Error fetching enrolled courses:', error);
+      }
+    };
+
+    fetchEnrolledCourses();
+  }, [userId]);
+
 
   const handleFetchNotifications = async () => {
     if (!courseId) {
@@ -15,7 +41,7 @@ function Inbox() {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch(`http://127.0.0.1:5000/user/get_notifications/${courseId}`);
+      const response = await fetch(`/user/get_notifications/${courseId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch notifications.');
       }
@@ -158,29 +184,36 @@ function Inbox() {
           <h2 className="inbox-title">Class Discussion</h2>
           <div className="form-container">
             <label htmlFor="courseId" className="input-label">
-              Enter the Course ID to see the Class Discussion
+              Select the Course ID to see the Class Discussion
             </label>
-            <input
-              type="text"
-              id="courseId"
-              value={courseId}
-              onChange={(e) => setCourseId(e.target.value)}
-              className="input-field"
-            />
+            <select
+                id="course_id"
+                className="form-input"
+                value={courseId}
+                onChange={(e) => setCourseId(e.target.value)}
+                required
+            >
+              <option value="" disabled>Select a course</option>
+              {enrolledCourses.map(course => (
+                  <option key={course.course_id} value={course.course_id}>
+                    {course.course_id} - {course.course_name}
+                  </option>
+              ))}
+            </select>
             <button onClick={handleFetchNotifications} className="button">Fetch Notifications</button>
           </div>
 
           {loading ? (
-            <p>Loading...</p>
+              <p>Loading...</p>
           ) : error ? (
-            <p className="error-message">{error}</p>
+              <p className="error-message">{error}</p>
           ) : (
-            <div className="notifications-container">
-              {notifications.length === 0 ? (
-                <p>No notifications available.</p>
-              ) : (
-                notifications.map((notification) => (
-                  <div key={notification.NotificationID} className="notification">
+              <div className="notifications-container">
+                {notifications.length === 0 ? (
+                    <p>No notifications available.</p>
+                ) : (
+                    notifications.map((notification) => (
+                        <div key={notification.NotificationID} className="notification">
                    <p><strong>Announcement:</strong> {notification.Message}</p>
                    <p><strong>Created At:</strong> {notification.DateSent}</p>
                   <p><strong>Created By:</strong> {notification.CreatorRole} (UserID: {notification.UserID})</p>

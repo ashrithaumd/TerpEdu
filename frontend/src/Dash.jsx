@@ -68,12 +68,12 @@ function Dash() {
     // Dynamically load CSS for the chatbot
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/chatbot.css";
+    link.href = "/chatbot/chatbot.css";
     document.head.appendChild(link);
 
     // Dynamically load JS for the chatbot
     const script = document.createElement("script");
-    script.src = "/chatbot.js";
+    script.src = "/chatbot/chatbot.js";
     script.async = true;
 
     // Ensure the script is only executed after it has loaded
@@ -398,19 +398,6 @@ function Dash() {
           <div className="main-content">
             {/* Welcome message */}
             <h2>Welcome, {user_name}!</h2>
-            {/* Form to fetch courses based on instructor ID */}
-            <div className="form-container">
-              <label htmlFor="instructorId">Enter Instructor ID:</label>
-              <input
-                type="text"
-                id="instructorId"
-                value={instructorId}
-                onChange={(e) => setInstructorId(e.target.value)}
-              />
-              <button onClick={handleFetchCourses}>Fetch Courses</button>
-              {error && <p className="error-message">{error}</p>}
-            </div>
-            {/* List of fetched courses */}
             {loading ? (
               <p>Loading...</p>
             ) : (
@@ -426,10 +413,10 @@ function Dash() {
                     >
                       {/* Display course information */}
                       <div className="course-content">
-                        <h4>{course.name}</h4>
-                        <p><strong>Course ID:</strong> {course.course_ID}</p>
-                        <p><strong>Description:</strong> {course.description}</p>
-                        <p><strong>Department:</strong> {course.department}</p>
+                        <h4>{course.course_name}</h4>
+                        <p><strong>Course ID:</strong> {course.course_id}</p>
+                        <p><strong>Description:</strong> {course.course_description}</p>
+                        <p><strong>Department:</strong> {course.course_department}</p>
                       </div>
                     </div>
                   ))

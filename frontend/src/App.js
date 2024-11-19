@@ -11,6 +11,7 @@ import AnnouncementsAndAlerts from './AnnouncementsandAlerts';
 import Reports from './Reports';
 import PostAnnouncement from './announcements';
 import UploadedMaterials from './uploaded_materials';
+import UploadedMaterialsStudent from './uploaded_materials_student';
 import ViewEnrolledStudents from './ViewEnrolledStudents';
 import CourseManagement from './CourseManagement';
 import AssignCourses from './AssignCourses';
@@ -61,7 +62,9 @@ function App() {
         
         {/* Route for Uploaded Materials page */}
         <Route path="/uploaded_materials" element={<UploadedMaterials />} />
-        
+
+        <Route path="/uploaded_materials_student" element={<UploadedMaterialsStudent />} />
+
         {/* Route for Assigning Courses */}
         <Route path="/assign-courses" element={<AssignCourses />} />
         
