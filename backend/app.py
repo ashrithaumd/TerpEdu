@@ -11,8 +11,8 @@ from flask import Flask, session
 from flask_session import Session
 
 project_root = os.path.dirname(os.path.abspath(__file__))  # Get the absolute path to the backend directory
-frontend_build_path = os.path.join(project_root, '../frontend/build')
-UPLOAD_FOLDER = os.path.join(project_root, '../frontend/public/materials')
+frontend_build_path = os.path.join(project_root, '..', 'frontend', 'build')
+UPLOAD_FOLDER = os.path.join(project_root, '..', 'frontend', 'public', 'materials')
 
 # Initialize the Flask app
 app = Flask(__name__, static_folder=frontend_build_path, static_url_path='')
