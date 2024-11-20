@@ -152,9 +152,9 @@ class CourseDao:
             Selects details for active courses and joins with instructors to provide instructor information.
         """
         sql = """
-        SELECT c.id AS CourseID, c.course_name AS CourseName, u.UserID AS InstructorID, u.Name AS InstructorName
+        SELECT c.course_id AS CourseID, c.course_name AS CourseName, u.UserID AS InstructorID, u.Name AS InstructorName
         FROM courses c
-        LEFT JOIN course_instructors ci ON c.id = ci.course_id
+        LEFT JOIN course_instructors ci ON c.course_id = ci.course_id
         LEFT JOIN users u ON ci.instructor_id = u.UserID
         WHERE c.is_currently_active = 1
         """
@@ -231,4 +231,11 @@ class CourseDao:
         WHERE CourseID = %s;
         """
         results = dao.execute_query(sql, (course_id,), fetch=True)  # Executes the query with the course ID.
+        return results
+    
+    def remove_courses(self,course_id):
+        sql="""
+        DELETE from courses WHERE course_id = %s;
+        """
+        results =dao.execute_query(sql,(course_id,))
         return results

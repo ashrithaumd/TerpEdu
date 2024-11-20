@@ -13,3 +13,6 @@ course_bp.route("/get_active_courses",methods=["GET","POST"])(course_controller.
 course_bp.route("/get_all_courses",methods=["GET","POST"])(course_controller.get_all_courses)
 course_bp.route("/get_user_counts", methods=["GET"])(course_controller.get_user_counts)
 course_bp.route("/get_enrolled/<int:course_id>",methods=["POST","GET"])(course_controller.get_enrolled)
+course_bp.route("/get_instructors",methods=["POST","GET"])(course_controller.get_instructors)
+course_bp.route("/assign_instructors",methods=["POST","GET"])(course_controller.assign_instructors)
+course_bp.route("/remove_course_by_id",methods=["POST","GET"])(course_controller.remove_course_by_id)

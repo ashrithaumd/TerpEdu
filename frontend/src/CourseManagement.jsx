@@ -21,6 +21,11 @@ const CourseManagement = () => {
     fetchCourses();
   }, []);
 
+  // Handlers for navigation
+  const handleAddCourse = () => {
+    window.location.href = '/create_course.html'; // Navigates to the public/create_course.html file
+  };
+
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', backgroundColor: '#f8f9fa', fontSize: '18px' }}>
       {/* Header with logo and welcome message */}
@@ -75,12 +80,12 @@ const CourseManagement = () => {
       </div>
       {/* Button styling for adding or removing courses */}
       <div style={{ marginTop: '30px', textAlign: 'center', display: 'flex', justifyContent: 'center', gap: '20px' }}>
-        <div style={{ padding: '20px', backgroundColor: '#27ae60', color: 'white', borderRadius: '8px', cursor: 'pointer', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+        <button
+          onClick={handleAddCourse}
+          style={{ padding: '20px', backgroundColor: '#27ae60', color: 'white', borderRadius: '8px', cursor: 'pointer', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', border: 'none' }}
+        >
           <h3>Add Course</h3>
-        </div>
-        <div style={{ padding: '20px', backgroundColor: '#e74c3c', color: 'white', borderRadius: '8px', cursor: 'pointer', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
-          <h3>Remove Course</h3>
-        </div>
+        </button>
       </div>
     </div>
   );

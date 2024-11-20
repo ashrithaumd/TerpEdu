@@ -54,10 +54,10 @@ function Signup() {
             font-family: 'Open Sans', sans-serif;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Changed from center to flex-start */
+            align-items: center;
             height: 100vh;
             background-color: #fff;
-            overflow-y: auto; /* Makes the page scrollable */
+            overflow: hidden;
           }
 
           .header {
@@ -80,47 +80,37 @@ function Signup() {
 
           .signup-container {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             width: 100%;
-            max-width: 600px; /* Match the login max width */
             margin-top: 100px;
             padding: 20px;
-          }
-
-          .logo {
-            margin-bottom: 20px;
-            text-align: center;
-          }
-
-          .logo img {
-            max-width: 300px;
-            height: auto;
+            position: relative;
           }
 
           .signup-box {
             width: 100%;
-            max-width: 500px; /* Match the login box width */
-            padding: 40px; /* Match the padding of login box */
-            border-radius: 15px;
+            max-width: 350px;
+            padding: 20px;
+            border-radius: 10px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
             border: 2px solid #f0b0b0;
             background-color: #fff;
             text-align: center;
-            margin-top: 10px;
+            margin: auto;
           }
 
-          .signup-box h3 {
-            font-size: 36px; /* Match the login heading size */
+          .signup-box h1 {
+            font-size: 28px;
             font-family: 'Open Sans', sans-serif;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             color: #333;
           }
 
           form input, form select {
-            width: 100%;
-            padding: 14px; /* Match padding of login inputs */
-            margin: 12px 0; /* Match margin of login inputs */
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin: 6px 0;
             border-radius: 5px;
             border: 1px solid #ddd;
             font-family: 'Open Sans', sans-serif;
@@ -128,7 +118,7 @@ function Signup() {
 
           .signup-button {
             width: 100%;
-            padding: 14px; /* Match padding of login button */
+            padding: 10px;
             background-color: #d32f2f;
             color: white;
             border: none;
@@ -136,24 +126,36 @@ function Signup() {
             font-weight: bold;
             font-family: 'Open Sans', sans-serif;
             cursor: pointer;
-            margin-top: 12px; /* Match margin of login button */
+            margin-top: 8px;
           }
 
           .signup-button:hover {
             background-color: #b71c1c;
           }
 
+          .terpedu-logo-container {
+            position: absolute;
+            left: 5%;
+            transform: translateY(-50%);
+            top: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
           .side-image-container {
             position: fixed;
-            top: 70px; /* Align with bottom of header */
+            top: 50%;
             right: 0;
-            bottom: 0; /* Extend to bottom of screen */
+            transform: translateY(-50%);
+            width: 250px;
+            height: auto;
             z-index: 0;
           }
 
           .side-image {
-            height: 100%; /* Stretch to fill container height */
-            width: auto; /* Maintain aspect ratio */
+            width: 250px;
+            height: auto;
           }
         `}
       </style>
@@ -163,81 +165,88 @@ function Signup() {
       </header>
 
       <div className="signup-container">
-        <main className="main">
-          <div className="logo">
-            <img src="/TerpEdu.png" alt="TerpEdu Logo" />
-          </div>
-          <div className="signup-box">
-            <h3>SIGN UP</h3>
-            <form onSubmit={handleSubmit}>
-              <input
-                type="text"
-                name="UserID"
-                placeholder="UserID"
-                required
-                value={formData.UserID}
-                onChange={handleChange}
-              />
-              <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                required
-                value={formData.name}
-                onChange={handleChange}
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                required
-                value={formData.email}
-                onChange={handleChange}
-              />
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                required
-                value={formData.password}
-                onChange={handleChange}
-              />
-              <select
-                name="role"
-                required
-                value={formData.role}
-                onChange={handleChange}
-              >
-                <option value="" disabled>
-                  Select Role
-                </option>
-                <option value="Student">Student</option>
-                <option value="Instructor">Instructor</option>
-                <option value="Admin">Admin</option>
-              </select>
-              <input
-                type="text"
-                name="address"
-                placeholder="Address"
-                required
-                value={formData.address}
-                onChange={handleChange}
-              />
-              <input
-                type="tel"
-                name="phoneNumber"
-                placeholder="Phone Number"
-                required
-                value={formData.phoneNumber}
-                onChange={handleChange}
-              />
-              <button type="submit" className="signup-button">Sign Up</button>
-            </form>
-          </div>
-        </main>
+        <div className="terpedu-logo-container">
+          <img
+            src="/TerpEdu.png"
+            alt="TerpEdu Logo"
+            style={{ maxWidth: '180px', height: 'auto' }}
+          />
+        </div>
+        <div className="signup-box">
+          <h1>SIGN UP</h1>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="UserID"
+              placeholder="UserID"
+              required
+              value={formData.UserID}
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              required
+              value={formData.name}
+              onChange={handleChange}
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              required
+              value={formData.email}
+              onChange={handleChange}
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              required
+              value={formData.password}
+              onChange={handleChange}
+            />
+            <select
+              name="role"
+              required
+              value={formData.role}
+              onChange={handleChange}
+            >
+              <option value="" disabled>
+                Select Role
+              </option>
+              <option value="Student">Student</option>
+              <option value="Instructor">Instructor</option>
+              <option value="Admin">Admin</option>
+            </select>
+            <input
+              type="text"
+              name="address"
+              placeholder="Address"
+              required
+              value={formData.address}
+              onChange={handleChange}
+            />
+            <input
+              type="tel"
+              name="phoneNumber"
+              placeholder="Phone Number"
+              required
+              value={formData.phoneNumber}
+              onChange={handleChange}
+            />
+            <button type="submit" className="signup-button">Sign Up</button>
+          </form>
+        </div>
       </div>
+
       <div className="side-image-container">
-        <img src="turtle.png" alt="Turtle" className="side-image" />
+        <img
+          src="/turtle.png"
+          alt="Side Turtle"
+          className="side-image"
+        />
       </div>
     </div>
   );

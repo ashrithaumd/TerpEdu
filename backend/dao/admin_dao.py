@@ -49,7 +49,8 @@ class AdminDao:
         ORDER BY 
             a.date_posted DESC;
         """
-        results = dao.execute_query(sql, fetch=True)  # Executes the SQL query and fetches results.
+        results = dao.execute_query(sql, fetch=True)
+        # print(results)# Executes the SQL query and fetches results.
         return [
             {
                 "CourseID": result[0],

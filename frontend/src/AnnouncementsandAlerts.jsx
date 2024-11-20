@@ -3,18 +3,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMicrophone } from '@fortawesome/free-solid-svg-icons';
 
 function AnnouncementsAndAlerts() {
-  // State to store announcements and track loading status
   const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch announcements from backend API
     const fetchAnnouncements = async () => {
       try {
         const response = await fetch('http://127.0.0.1:5000/admin/get_announcements');
         if (response.ok) {
           const data = await response.json();
-          setAnnouncements(data);
+          setAnnouncements(data.announcements); // Access 'announcements' from the API response
         } else {
           console.error('Failed to fetch announcements.');
         }
@@ -30,7 +28,6 @@ function AnnouncementsAndAlerts() {
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', backgroundColor: '#f8f9fa' }}>
-      {/* Header for the page */}
       <h1 style={{ textAlign: 'center', backgroundColor: '#e74c3c', color: 'white', padding: '30px', borderRadius: '10px' }}>
         Announcements & Alerts
       </h1>
@@ -38,7 +35,6 @@ function AnnouncementsAndAlerts() {
         <p style={{ textAlign: 'center' }}>Loading announcements...</p>
       ) : (
         announcements.length > 0 ? (
-          // Display each announcement
           announcements.map((announcement, index) => (
             <div key={index} style={{ margin: '30px 0', padding: '25px', backgroundColor: '#fff', borderRadius: '15px' }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>

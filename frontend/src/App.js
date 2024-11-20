@@ -14,6 +14,8 @@ import UploadedMaterials from './uploaded_materials';
 import ViewEnrolledStudents from './ViewEnrolledStudents';
 import CourseManagement from './CourseManagement';
 import AssignCourses from './AssignCourses';
+import StudentDashboard from './StudentDashboard';
+import Chatbot from './Chatbot';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
       <Routes>
         {/* Default route for Login page */}
         <Route path="/" element={<Login />} />  
+        
+        <Route path="/chatbot" element={<Chatbot />} />
         
         {/* Route for Dashboard page */}
         <Route path="/dash" element={<Dash />} />
@@ -38,7 +42,7 @@ function App() {
         <Route path="/dash/:user_name" element={<Dash />} />
         
         {/* Route for Student Dashboard with dynamic username */}
-        <Route path="/student_dashboard/:user_name" element={<Dash />} /> 
+        <Route path="/student_dashboard/:user_name" element={<StudentDashboard />} /> 
         
         {/* Route for User Management page */}
         <Route path="/user-management" element={<UserManagement />} />
@@ -47,7 +51,7 @@ function App() {
         <Route path="/course-management" element={<CourseManagement />} />
         
         {/* Route for Announcements and Alerts page */}
-        <Route path="/announcements" element={<AnnouncementsAndAlerts />} />
+        <Route path="/announcements-alerts" element={<AnnouncementsAndAlerts />} />
         
         {/* Route for Reports page */}
         <Route path="/reports" element={<Reports />} />
