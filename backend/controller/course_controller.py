@@ -125,6 +125,31 @@ class CourseController:
             print(f"Error occurred: {e}")  # Log the error for debugging
             return jsonify({"error": f"Failed to retrieve materials: {str(e)}"}), 500
     
+    def get_material_for_students(self,course_id):
+        try:
+            materials = self._course_dao.get_course_materials(course_id)
+            print("course_controller", materials)
+            
+            if not materials:
+                return jsonify({"message": "No materials found for the specified user."}), 404
+
+            # Format materials for response
+            formatted_materials = [
+                {
+                    "material_id": material[0],  
+                    "material_type": material[1],
+                    "title": material[2],
+                    "file_path": f"../frontend/public/{material[3]}"  
+                }
+                for material in materials
+            ]
+
+            return jsonify(formatted_materials), 200
+        except Exception as e:
+            print(f"Error occurred: {e}")  # Log the error for debugging
+            return jsonify({"error": f"Failed to retrieve materials: {str(e)}"}), 500
+        
+    
     def get_all_courses(self):
         """
         Retrieve all courses from the DAO.
@@ -160,14 +185,15 @@ class CourseController:
                 {
                     "CourseID": course[0],
                     "CourseName": course[1],
-                    "InstructorID": course[2],
-                    "InstructorName": course[3],
+                    "InstructorID": course[2] if course[2] is not None else "",
+                    "InstructorName": course[3] if course[3] is not None else "Unassigned",
                 }
                 for course in courses
             ]
             return jsonify(response), 200
         except Exception as e:
             return jsonify({'error': str(e)}), 500
+
 
     def get_instructors(self):
         """
@@ -177,24 +203,56 @@ class CourseController:
         """
         try:
             instructors = self._course_dao.get_instructors()
-            return jsonify(instructors), 200
+            response = [
+                {
+                    "InstructorID": instructor[0],
+                    "Name": instructor[1],
+                }
+                for instructor in instructors
+            ]
+            return jsonify(response), 200
         except Exception as e:
             return jsonify({'error': str(e)}), 500
 
+
+   
    
     def assign_instructors(self):
         """
-        Assign instructors to courses based on request data.
-        Expects assignments in the request body.
-        Returns:
-            JSON response indicating success or error.
+        Assign instructors to courses and return updated course data.
         """
         try:
+            # Get the assignments from the request body
             assignments = request.json
+
+            # Check if assignments is valid
+            if not assignments or not isinstance(assignments, dict):
+                return jsonify({'error': 'Invalid request format. Expected a JSON object.'}), 400
+
+            # Process the assignments
             self._course_dao.assign_instructors(assignments)
-            return jsonify({'message': 'Courses updated successfully'}), 200
+
+            # Fetch updated courses
+            updated_courses = self._course_dao.get_active_courses()
+
+            # Return success response with updated courses
+            return jsonify({
+                'message': 'Courses updated successfully',
+                'updatedCourses': [
+                    {
+                        'CourseID': course[0],
+                        'CourseName': course[1],
+                        'InstructorID': course[2],
+                        'InstructorName': course[3]
+                    }
+                    for course in updated_courses
+                ]
+            }), 200
+
         except Exception as e:
             return jsonify({'error': str(e)}), 500
+
+
     
     def get_user_counts(self):
         """

@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 
 function UploadedMaterials() {
   const [materials, setMaterials] = useState([]);
-  const [userId, setUserId] = useState('');
-  const [submittedUserId, setSubmittedUserId] = useState(null);
+  const [course_id, setCourseId] = useState('');
+  const [submittedCourseId, setSubmittedCourseId] = useState(null);
   const [selectedFile, setSelectedFile] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setSubmittedUserId(userId);
+    setSubmittedCourseId(course_id);
 
     try {
-      const response = await fetch(`/course/get_uploaded_materials/${userId}`, {
+      const response = await fetch(`/course/get_uploaded_materials_for_student/${course_id}`, {
         method: 'GET',
         credentials: 'include'
       });
@@ -184,21 +184,21 @@ function UploadedMaterials() {
 
       <header className="header">
         <h1>TerpEdu</h1>
-        <h2>Instructor Dashboard</h2>
+        <h2>Student Dashboard</h2>
       </header>
 
       <div className="main-container">
         <div className="content-box">
           <h2 className="title">Uploaded Materials</h2>
-          <p className="subtitle">View the uploaded material for User ID:</p>
+          <p className="subtitle">View the uploaded material for Course ID:</p>
           <div className="form-container">
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
-                id="userId"
-                value={userId}
-                onChange={(e) => setUserId(e.target.value)}
-                placeholder="Enter User ID"
+                id="course_id"
+                value={course_id}
+                onChange={(e) => setCourseId(e.target.value)}
+                placeholder="Enter Course ID"
                 className="input-field"
                 required
               />
@@ -206,9 +206,9 @@ function UploadedMaterials() {
             </form>
           </div>
 
-          {submittedUserId && (
+          {submittedCourseId && (
             <div className="materials-container">
-              <h3 className="materials-heading">Materials for User ID: {submittedUserId}</h3>
+              <h3 className="materials-heading">Materials for Course ID: {submittedCourseId}</h3>
               {materials.length === 0 ? (
                 <p>No materials available.</p>
               ) : (

@@ -32,9 +32,6 @@ class AdminDao:
         
         Returns:
             list: A list of dictionaries containing course ID, course name, announcement content, and the date posted.
-        
-        SQL Query:
-            Selects course and announcement details from the announcements table, joining with the courses table to retrieve course names.
         """
         sql = """
         SELECT 
@@ -49,14 +46,40 @@ class AdminDao:
         ORDER BY 
             a.date_posted DESC;
         """
-        results = dao.execute_query(sql, fetch=True)
-        # print(results)# Executes the SQL query and fetches results.
-        return [
-            {
-                "CourseID": result[0],
-                "CourseName": result[1],
-                "Announcement": result[2],
-                "DatePosted": result[3].strftime('%Y-%m-%d %H:%M:%S')
-            }
-            for result in results
-        ]
+        try:
+            results = dao.execute_query(sql, fetch=True)
+            if not results:
+                return []
+
+            announcements = []
+            for result in results:
+                # Handle date formatting properly
+                date_posted = result[3]
+                if isinstance(date_posted, str):
+                    # If it's already a string, use it directly
+                    formatted_date = date_posted
+                elif date_posted is not None:
+                    # Format datetime objects to a readable string
+                    formatted_date = date_posted.strftime('%Y-%m-%d %H:%M:%S')
+                else:
+                    # Handle NULL dates
+                    formatted_date = "N/A"
+
+                announcements.append({
+                    "CourseID": result[0],
+                    "CourseName": result[1],
+                    "Announcement": result[2],
+                    "DatePosted": formatted_date,
+                })
+
+            return announcements
+        except Exception as e:
+            print(f"Error in get_announcements: {e}")
+            raise Exception(f"Failed to fetch announcements: {e}")
+
+
+
+   
+
+
+        

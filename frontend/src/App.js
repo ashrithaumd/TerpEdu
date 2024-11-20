@@ -15,7 +15,6 @@ import ViewEnrolledStudents from './ViewEnrolledStudents';
 import CourseManagement from './CourseManagement';
 import AssignCourses from './AssignCourses';
 import StudentDashboard from './StudentDashboard';
-import Chatbot from './Chatbot';
 
 function App() {
   return (
@@ -23,8 +22,6 @@ function App() {
       <Routes>
         {/* Default route for Login page */}
         <Route path="/" element={<Login />} />  
-        
-        <Route path="/chatbot" element={<Chatbot />} />
         
         {/* Route for Dashboard page */}
         <Route path="/dash" element={<Dash />} />

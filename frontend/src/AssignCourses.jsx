@@ -6,13 +6,14 @@ function AssignCourses() {
   const [selectedInstructors, setSelectedInstructors] = useState({});
 
   useEffect(() => {
-    // Fetch active courses from backend and set initial instructor selection
+    // Fetch active courses from the backend
     const fetchCourses = async () => {
       try {
-        const response = await fetch('https://terpedu-0949ddb44d51.herokuapp.com/course/get_active_courses');
+        const response = await fetch("http://127.0.0.1:5000/course/get_active_courses");
         if (response.ok) {
           const data = await response.json();
           setCourses(data);
+
           // Initialize instructor selections for each course
           const initialSelection = {};
           data.forEach((course) => {
@@ -27,10 +28,10 @@ function AssignCourses() {
       }
     };
 
-    // Fetch available instructors from backend
+    // Fetch available instructors from the backend
     const fetchInstructors = async () => {
       try {
-        const response = await fetch('https://terpedu-0949ddb44d51.herokuapp.com/course/get_instructors');
+        const response = await fetch("http://127.0.0.1:5000/course/get_instructors");
         if (response.ok) {
           const data = await response.json();
           setInstructors(data);
@@ -42,7 +43,7 @@ function AssignCourses() {
       }
     };
 
-    // Fetch data for courses and instructors on component mount
+    // Fetch courses and instructors on component mount
     fetchCourses();
     fetchInstructors();
   }, []);
@@ -58,25 +59,47 @@ function AssignCourses() {
   // Handle saving instructor assignments for selected courses
   const handleSave = async () => {
     try {
-      const response = await fetch('https://terpedu-0949ddb44d51.herokuapp.com/course/assign_instructors', {
-        method: 'POST',
+      const response = await fetch("http://127.0.0.1:5000/course/assign_instructors", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(selectedInstructors)
+        body: JSON.stringify(selectedInstructors),
       });
-
+  
       if (response.ok) {
-        alert('Courses updated successfully!');
+        // Parse the response
+        const responseData = await response.json();
+        console.log("Backend response:", responseData);
+  
+        if (responseData.updatedCourses && Array.isArray(responseData.updatedCourses)) {
+          // Update courses and selectedInstructors state with the updated data
+          setCourses(responseData.updatedCourses);
+  
+          const updatedSelections = {};
+          responseData.updatedCourses.forEach((course) => {
+            updatedSelections[course.CourseID] = course.InstructorID || "";
+          });
+          setSelectedInstructors(updatedSelections);
+  
+          alert(responseData.message || "Courses updated successfully!");
+        } else {
+          // Handle missing or invalid updatedCourses
+          console.warn("No updated courses received from the backend.");
+          alert("Courses updated, but no updated data was received from the server.");
+        }
       } else {
-        console.error('Error saving instructor assignments:', response);
-        alert('Failed to update courses. Please try again.');
+        // Handle non-200 HTTP responses
+        const errorData = await response.json();
+        console.error("Error saving instructor assignments:", errorData);
+        alert(`Failed to update courses: ${errorData.error || "Unknown error"}`);
       }
     } catch (error) {
-      console.error('An error occurred while saving instructor assignments:', error);
-      alert('Failed to update courses. Please try again.');
+      console.error("An error occurred while saving instructor assignments:", error);
+      alert("Failed to update courses. Please try again.");
     }
   };
+  
 
   return (
     <div className="assign-courses">
@@ -151,8 +174,8 @@ function AssignCourses() {
                   >
                     <option value="">Select Instructor</option>
                     {instructors.map((instructor) => (
-                      <option key={instructor[0]} value={instructor[0]}>
-                        {instructor[1]}
+                      <option key={instructor.InstructorID} value={instructor.InstructorID}>
+                        {instructor.Name}
                       </option>
                     ))}
                   </select>

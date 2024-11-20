@@ -10,7 +10,7 @@ function Login() {
     event.preventDefault();
 
     try {
-      const response = await fetch('https://terpedu-0949ddb44d51.herokuapp.com/user/login', {
+      const response = await fetch('/user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -23,6 +23,7 @@ function Login() {
 
       const data = await response.json();
       if (data.status === 'success') {
+        localStorage.setItem("user_id", data.user_id);
         if (data.role === 'Admin') {
           navigate(`/admin_dashboard/${encodeURIComponent(data.user_name)}`);
         } else if (data.role === 'Student') {

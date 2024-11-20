@@ -33,31 +33,14 @@ class AdminController:
         try:
             # Fetch announcements using DAO
             announcements = self.admin_dao.get_announcements()
-            
             return {"status": "success", "announcements": announcements}
         except Exception as e:
-            # Handle any exceptions and return an error message
-            return {"status": "error", "message": str(e)}
+            # Handle exceptions and return an error message
+            print(f"Error in get_announcements: {e}")
+            return {"status": "error", "message": f"Failed to retrieve announcements: {str(e)}"}
+
         
-    def assign_instructor(self):
-        """
-        Assign an instructor to a specific course.
-        Expects 'course_id' and 'instructor_id' in the request JSON payload.
-        Returns:
-            JSON response with a success or error message.
-        """
-        data = request.json
-        course_id = data.get('course_id')
-        instructor_id = data.get('instructor_id')
-        
-        try:
-            # Assign the instructor to the specified course using DAO
-            self.admin_dao.assign_course(course_id, instructor_id)
-            return jsonify({"message": "Instructor assigned successfully"}), 201
-        except Exception as e:
-            # Handle any exceptions and return an error message
-            return jsonify({"error": str(e)}), 500
-        
+   
     def enroll_user(self):
         """
         Enroll a user in a course. 

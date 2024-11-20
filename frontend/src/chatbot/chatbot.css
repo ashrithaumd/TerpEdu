@@ -1,0 +1,176 @@
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Chatbot toggle button */
+.chatbot-toggle {
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1000 !important;
+}
+
+/* Chatbot container */
+.chatbot-container {
+    position: fixed !important;
+    bottom: 80px !important;
+    right: 20px !important;
+    width: 400px;
+    max-height: 500px;
+    overflow: hidden;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000 !important;
+}
+
+/* Chatbox layout */
+#chatbox {
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+}
+
+/* Chatbot header with gradient background */
+.chatbot-header {
+    padding: 10px;
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+    background: linear-gradient(to right, #ff6347, #ffd700); /* Gradient from red to yellow */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* Messages container */
+#chat-messages {
+    flex-grow: 1;
+    padding: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Bot message styling */
+.bot-message {
+    display: flex;
+    justify-content: flex-start;
+    max-width: 70%;
+    font-family: "Arial, sans-serif";
+    font-size: 16px; 
+}
+
+.bot-message .message {
+    background-color: #f8d7da; /* Soft red tone */
+    color: #721c24; /* Dark red text for contrast */
+    padding: 10px;
+    border-radius: 10px;
+    word-wrap: break-word;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* User message styling */
+.user-message {
+    display: flex;
+    justify-content: flex-end;
+    max-width: 70%;
+    margin-left: auto; 
+    font-family: "Arial, sans-serif";
+    font-size: 16px; 
+}
+
+.user-message .message {
+    background-color: #fff3cd; /* Soft yellow tone */
+    color: #856404; /* Dark yellow text for contrast */
+    padding: 10px;
+    border-radius: 10px;
+    word-wrap: break-word;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer containing input and send button */
+.chatbot-footer {
+    display: flex;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* Input field styling */
+#user-input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Send button styling */
+#send-btn {
+    margin-left: 10px;
+    padding: 8px 16px;
+    background-color: #ed5858; /* Darker red for the button */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#send-btn:hover {
+    background-color: #b32638; /* Even darker red for hover */
+}
+
+/* Suggestions container */
+.suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+}
+
+/* Suggestion buttons */
+.suggestions button {
+    padding: 8px 12px;
+    background-color: #ed5858;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.suggestions button:hover {
+    background-color: #b32638;
+}
+
+/* Typing indicator styling */
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align to the left */
+    gap: 5px;
+    margin: 5px 0;
+    padding: 0;
+    background: none;
+    border: none;
+}
+
+.typing-indicator img {
+    width: 60px;
+    height: auto;
+}
+
+/* Smooth scrolling for new messages */
+#chat-messages {
+    scroll-behavior: smooth;
+}

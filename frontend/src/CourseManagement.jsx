@@ -7,7 +7,7 @@ const CourseManagement = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch('https://terpedu-0949ddb44d51.herokuapp.com/course/get_all_courses');
+        const response = await fetch('/course/get_all_courses');
         if (response.ok) {
           const data = await response.json();
           setCourses(data);

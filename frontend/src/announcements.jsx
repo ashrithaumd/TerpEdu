@@ -15,7 +15,7 @@ function PostAnnouncement() {
 
     try {
       // Send a POST request to the server with form data
-      const response = await fetch('https://terpedu-0949ddb44d51.herokuapp.com/inst/announce', {
+      const response = await fetch('/inst/announce', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

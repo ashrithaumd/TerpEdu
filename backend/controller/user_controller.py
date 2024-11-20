@@ -32,20 +32,23 @@ class UserController:
     def get_notifications(self, course_id):
         # Fetch notifications based on the course_id and include user role
         notifications = self._user_dao.get_notifications_by_course(course_id)
-        
+
         # Convert notifications to a suitable format for response (e.g., JSON)
-        response = [
-            {
+        response = []
+        for notification in notifications:
+            date_sent = notification[3]
+            if not isinstance(date_sent, str):
+                date_sent = date_sent.strftime('%Y-%m-%d %H:%M:%S')  # Format if it's a datetime object
+
+            response.append({
                 "NotificationID": notification[0],
                 "UserID": notification[1],
                 "Message": notification[2],
-                "DateSent": notification[3].strftime('%Y-%m-%d %H:%M:%S'),
+                "DateSent": date_sent,
                 "CourseID": notification[4],
                 "CreatorRole": notification[5]
-            }
-            for notification in notifications
-        ]
-        
+            })
+
         return jsonify(response)
 
     def login_user(self):
@@ -66,7 +69,7 @@ class UserController:
                 user_name = user_data[1]
 
                 # Return a JSON response with status, role, and user_name
-                return jsonify({"status": "success", "role": role, "user_name": user_name})
+                return jsonify({"status": "success", "role": role, "user_name": user_name, "user_id" : user['user_id']})
             else:
                 return jsonify({"status": "failed", "message": "Invalid credentials"}), 401
 
@@ -79,7 +82,7 @@ class UserController:
                     "Name": user[1],
                     "Email": user[2],
                     "Role": user[3],
-                    "DateCreated": user[4].strftime('%Y-%m-%d %H:%M:%S')
+                    "DateCreated": user[4]
                 }
                 for user in users
             ]

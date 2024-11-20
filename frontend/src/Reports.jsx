@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Chart } from "chart.js/auto";
 
 function Reports() {
-  const [userCounts, setUserCounts] = useState({});
+  const [userCounts, setUserCounts] = useState({}); // State to store user role counts
+  const chartRef = useRef(null); // Reference to the Chart instance
+  const canvasRef = useRef(null); // Reference to the canvas element
 
+  // Fetch user counts from the API
   useEffect(() => {
-    // Fetch user counts
     const fetchUserCounts = async () => {
       try {
-        const response = await fetch("https://terpedu-0949ddb44d51.herokuapp.com/course/get_user_counts");
+        const response = await fetch("/course/get_user_counts");
         if (response.ok) {
           const data = await response.json();
-          setUserCounts(data);
+          setUserCounts(data); // Update state with fetched data
         } else {
           console.error("Error fetching user counts:", response);
         }
@@ -23,19 +25,30 @@ function Reports() {
     fetchUserCounts();
   }, []);
 
+  // Create and update the chart whenever userCounts changes
   useEffect(() => {
     if (Object.keys(userCounts).length > 0) {
-      // Render chart
-      const ctx = document.getElementById("userRoleChart").getContext("2d");
-      new Chart(ctx, {
+      // Destroy existing chart if it exists
+      if (chartRef.current) {
+        chartRef.current.destroy();
+      }
+
+      // Create a new chart
+      const ctx = canvasRef.current.getContext("2d");
+      chartRef.current = new Chart(ctx, {
         type: "bar",
         data: {
-          labels: Object.keys(userCounts), // Roles (e.g., Student, Instructor)
+          labels: Object.keys(userCounts), // Roles (e.g., Student, Instructor, Admin)
           datasets: [
             {
               label: "Number of Users",
-              data: Object.values(userCounts), // Counts (e.g., 100, 10)
-              backgroundColor: ["#f39c12", "#3498db"], // Customize colors
+              data: Object.values(userCounts), // Counts for each role
+              backgroundColor: [
+                "#f39c12", // Student
+                "#3498db", // Instructor
+                "#1abc9c", // Admin
+              ],
+              borderColor: "#2c3e50",
               borderWidth: 1,
             },
           ],
@@ -45,6 +58,7 @@ function Reports() {
           plugins: {
             legend: {
               display: true,
+              position: "top",
             },
             tooltip: {
               enabled: true,
@@ -68,12 +82,19 @@ function Reports() {
         },
       });
     }
+
+    // Cleanup function to destroy the chart instance on component unmount
+    return () => {
+      if (chartRef.current) {
+        chartRef.current.destroy();
+      }
+    };
   }, [userCounts]);
 
   return (
-    <div>
-      <h2>User Role Distribution</h2>
-      <canvas id="userRoleChart" width="400" height="200"></canvas>
+    <div style={{ width: "80%", margin: "auto", textAlign: "center" }}>
+      <h1>User Role Distribution</h1>
+      <canvas id="userRoleChart" ref={canvasRef} width="400" height="200"></canvas>
     </div>
   );
 }

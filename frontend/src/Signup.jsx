@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import "./chatbot/chatbot.css"; // Import chatbot styling
+import { loadInitialSuggestions, sendMessage } from './chatbot/chatbot.js';
 
 function Signup() {
   const navigate = useNavigate();
@@ -13,6 +15,8 @@ function Signup() {
     phoneNumber: ''
   });
 
+  const [showChatbot, setShowChatbot] = useState(false); // Chatbot visibility state
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -24,7 +28,7 @@ function Signup() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('https://terpedu-0949ddb44d51.herokuapp.com/user/create_users', {
+      const response = await fetch('/user/create_users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -42,6 +46,73 @@ function Signup() {
       console.error('Error:', error);
     }
   };
+
+  const toggleChatbot = () => {
+    console.log("Chatbot visibility toggled:", !showChatbot);
+    setShowChatbot(!showChatbot);
+  };
+
+
+  useEffect(() => {
+    // Dynamically load CSS for the chatbot
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "/chatbot.css";
+    document.head.appendChild(link);
+
+    // Dynamically load JS for the chatbot
+    const script = document.createElement("script");
+    script.src = "/chatbot.js";
+    script.async = true;
+
+    // Ensure the script is only executed after it has loaded
+    script.onload = () => {
+        console.log("Chatbot script loaded successfully");
+        if (typeof loadInitialSuggestions === "function") {
+            loadInitialSuggestions(); // Call the function from chatbot.js to initialize suggestions
+        }
+    };
+
+    script.onerror = () => {
+        console.error("Failed to load chatbot script");
+    };
+
+    document.body.appendChild(script);
+
+    // Handle event listeners for the chatbot when it is shown
+    if (showChatbot) {
+        const sendButton = document.getElementById("send-btn");
+        const userInput = document.getElementById("user-input");
+
+        const handleSend = () => sendMessage();
+        const handleKeyPress = (e) => {
+            if (e.key === "Enter") sendMessage();
+        };
+
+        if (sendButton && userInput) {
+            sendButton.addEventListener("click", handleSend);
+            userInput.addEventListener("keypress", handleKeyPress);
+        }
+
+        // Cleanup event listeners
+        return () => {
+            if (sendButton && userInput) {
+                sendButton.removeEventListener("click", handleSend);
+                userInput.removeEventListener("keypress", handleKeyPress);
+            }
+        };
+    }
+
+    // Cleanup function to remove dynamically added CSS and JS files
+    return () => {
+        if (link.parentNode) {
+            document.head.removeChild(link);
+        }
+        if (script.parentNode) {
+            document.body.removeChild(script);
+        }
+    };
+}, [showChatbot]);
 
   return (
     <div>
@@ -134,14 +205,16 @@ function Signup() {
           }
 
           .terpedu-logo-container {
-            position: absolute;
-            left: 5%;
-            transform: translateY(-50%);
-            top: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+              position: absolute; 
+              top: -60px; /* Adjust this value to move it further up or down */
+              left: 45%;
+              transform: translateX(-50%);
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              z-index: 1;
           }
+
 
           .side-image-container {
             position: fixed;
@@ -157,6 +230,29 @@ function Signup() {
             width: 250px;
             height: auto;
           }
+
+          .chatbot-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+          }
+
+          .chatbot-container {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 400px;
+            max-height: 500px;
+            overflow: hidden;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+          }
         `}
       </style>
 
@@ -165,14 +261,14 @@ function Signup() {
       </header>
 
       <div className="signup-container">
-        <div className="terpedu-logo-container">
-          <img
-            src="/TerpEdu.png"
-            alt="TerpEdu Logo"
-            style={{ maxWidth: '180px', height: 'auto' }}
-          />
-        </div>
         <div className="signup-box">
+          <div className="terpedu-logo-container">
+            <img
+              src="/TerpEdu.png"
+              alt="TerpEdu Logo"
+              style={{ maxWidth: '180px', height: 'auto' }}
+            />
+          </div>
           <h1>SIGN UP</h1>
           <form onSubmit={handleSubmit}>
             <input
@@ -248,6 +344,30 @@ function Signup() {
           className="side-image"
         />
       </div>
+
+      <button className="chatbot-toggle" onClick={toggleChatbot}>
+        <img src="/chatbot-icon2.gif" alt="Chatbot" style={{ width: '120px', height: '90px' }} />
+      </button>
+
+
+      {/* Chatbot */}
+      {showChatbot && (
+        <div className="chatbot-container">
+          <div id="chatbox">
+            <div className="chatbot-header">TerpEdu Buddy</div>
+            <div id="chat-messages">
+              <div className="bot-message">
+                <div className="message">Welcome to TerpEdu! I am TerpEdu Buddy.</div>
+              </div>
+              <div id="suggestion-buttons" className="suggestions"></div>
+            </div>
+            <div className="chatbot-footer">
+              <input id="user-input" type="text" placeholder="Ask a question..." />
+              <button id="send-btn">Send</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
