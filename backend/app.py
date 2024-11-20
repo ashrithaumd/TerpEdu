@@ -15,7 +15,7 @@ frontend_build_path = os.path.join(project_root, '..', 'frontend', 'build')
 UPLOAD_FOLDER = os.path.join(project_root, '..', 'frontend', 'public', 'materials')
 
 # Initialize the Flask app
-app = Flask(__name__, static_folder=frontend_build_path, static_url_path='')
+app = Flask(__name__, static_folder=frontend_build_path, static_url_path='/')
 CORS(app,supports_credentials=True)
 # app.config['SECRET_KEY'] = 'da7bc86442a0cf44cc2aca2f5692d89e' 
 # app.config['SESSION_TYPE'] = 'filesystem'  
