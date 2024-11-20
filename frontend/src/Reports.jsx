@@ -8,7 +8,7 @@ function Reports() {
     // Fetch user counts
     const fetchUserCounts = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:5000/course/get_user_counts");
+        const response = await fetch("/course/get_user_counts");
         if (response.ok) {
           const data = await response.json();
           setUserCounts(data);

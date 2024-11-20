@@ -9,7 +9,7 @@ function AnnouncementsAndAlerts() {
   useEffect(() => {
     const fetchAnnouncements = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/admin/get_announcements');
+        const response = await fetch('/admin/get_announcements');
         if (response.ok) {
           const data = await response.json();
           setAnnouncements(data.announcements); // Access 'announcements' from the API response

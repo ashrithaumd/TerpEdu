@@ -7,7 +7,7 @@ const CourseManagement = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/course/get_all_courses');
+        const response = await fetch('/course/get_all_courses');
         if (response.ok) {
           const data = await response.json();
           setCourses(data);

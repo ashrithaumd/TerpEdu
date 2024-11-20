@@ -254,7 +254,7 @@ function StudentDashboard() {
     setLoading(true);
     setError("");
     try {
-      const response = await fetch(`http://127.0.0.1:5000/student/dashboard/${userID}`);
+      const response = await fetch(`/student/dashboard/${userID}`);
       if (!response.ok) {
         throw new Error("Failed to fetch dashboard data");
       }
@@ -296,7 +296,7 @@ function StudentDashboard() {
       return;
     }
     try {
-      const response = await fetch("http://127.0.0.1:5000/student/enroll", {
+      const response = await fetch("/student/enroll", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_id: userID, course_id: selectedCourse }),
@@ -321,7 +321,7 @@ function StudentDashboard() {
       return;
     }
     try {
-      const response = await fetch("http://127.0.0.1:5000/student/drop", {
+      const response = await fetch("/student/drop", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_id: userID, course_id: selectedCourse }),
