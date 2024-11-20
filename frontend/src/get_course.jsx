@@ -49,7 +49,7 @@ function GetCourse() {
 
     try {
       // POST request to upload the course material
-      const response = await fetch(`http://localhost:5000/course/course_material/${course.course_ID}/${course.instructor_ID}`, {
+      const response = await fetch(`https://terpedu-0949ddb44d51.herokuapp.com/course/course_material/${course.course_ID}/${course.instructor_ID}`, {
         method: 'POST',
         body: formData,
         credentials: 'include', // Ensures cookies are sent if needed

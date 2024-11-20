@@ -19,7 +19,7 @@ function Dash() {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch(`http://localhost:5000/inst/get_courses_by_inst/${instructorId}`);
+      const response = await fetch(`https://terpedu-0949ddb44d51.herokuapp.com/inst/get_courses_by_inst/${instructorId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch courses');
       }

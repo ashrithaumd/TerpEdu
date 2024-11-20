@@ -10,7 +10,7 @@ function Login() {
     event.preventDefault();
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/user/login', {
+      const response = await fetch('https://terpedu-0949ddb44d51.herokuapp.com/user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

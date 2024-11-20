@@ -11,7 +11,7 @@ function UploadedMaterials() {
     setSubmittedUserId(userId);
 
     try {
-      const response = await fetch(`/course/get_uploaded_materials/${userId}`, {
+      const response = await fetch(`https://terpedu-0949ddb44d51.herokuapp.com/course/get_uploaded_materials/${userId}`, {
         method: 'GET',
         credentials: 'include'
       });

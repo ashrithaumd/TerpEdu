@@ -15,7 +15,7 @@ function Inbox() {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch(`http://localhost:5000/user/get_notifications/${courseId}`);
+      const response = await fetch(`https://terpedu-0949ddb44d51.herokuapp.com/user/get_notifications/${courseId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch notifications.');
       }

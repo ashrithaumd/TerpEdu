@@ -12,7 +12,7 @@ function ViewEnrolledStudents() {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/course/get_enrolled/${courseId}`);
+      const response = await fetch(`https://terpedu-0949ddb44d51.herokuapp.com/course/get_enrolled/${courseId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch enrolled students');
       }

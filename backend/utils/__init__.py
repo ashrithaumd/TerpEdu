@@ -1,12 +1,14 @@
 import logging
-from logging import handlers
 
-formatter = logging.Formatter(
-    fmt="%(asctime)s - %(levelname)-1s - %(module)20s - %(message)s"
-)
-logger = logging.getLogger("terpedu-logger")
+from app import app
 
-logHandler = handlers.TimedRotatingFileHandler("logs/bales.log", when="h", interval=1)
-logHandler.setLevel(logging.DEBUG)
-logHandler.setFormatter(formatter)
-logger.addHandler(logHandler)
+logger = app.logger
+
+handler = logging.StreamHandler()
+
+logger.setLevel(logging.DEBUG)
+
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+
+logger.addHandler(handler)

@@ -11,7 +11,7 @@ function UserManagement() {
     // Fetch user data from backend API
     const fetchUsers = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/user/get_all_users');
+        const response = await fetch('https://terpedu-0949ddb44d51.herokuapp.com/user/get_all_users');
         if (response.ok) {
           const data = await response.json();
           console.log('Fetched user data:', data);

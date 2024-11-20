@@ -38,6 +38,14 @@ class CourseController:
             return "Course created successfully!"  
         return render_template("course_form.html")
 
+    def remove_course_by_id(self):
+        if request.method == "POST":
+            # Extract form data for course remove
+            course_id = request.form['courseId']
+            self._course_dao.remove_courses(course_id)
+            return "Course created successfully!"  
+        return render_template("remove_course_form.html")
+    
     def get_course(self, course_id):
         """
         Retrieve a course by its ID using the DAO.
@@ -211,3 +219,7 @@ class CourseController:
         enrolled_count = self._course_dao.get_enrolled(course_id)
         result_data = {"enrolledCount": enrolled_count}
         return result_data
+    
+    def remove_courses(self,course_id):
+        result = self._course_dao.remove_courses(course_id)
+        return result

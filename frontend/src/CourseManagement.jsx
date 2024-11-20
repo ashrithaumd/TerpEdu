@@ -7,7 +7,7 @@ const CourseManagement = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/course/get_all_courses');
+        const response = await fetch('https://terpedu-0949ddb44d51.herokuapp.com/course/get_all_courses');
         if (response.ok) {
           const data = await response.json();
           setCourses(data);
@@ -20,6 +20,11 @@ const CourseManagement = () => {
     };
     fetchCourses();
   }, []);
+
+  // Handlers for navigation
+  const handleAddCourse = () => {
+    window.location.href = '/create_course.html'; // Navigates to the public/create_course.html file
+  };
 
   return (
     <div style={{ fontFamily: 'Arial, sans-serif', padding: '20px', backgroundColor: '#f8f9fa', fontSize: '18px' }}>
@@ -75,12 +80,12 @@ const CourseManagement = () => {
       </div>
       {/* Button styling for adding or removing courses */}
       <div style={{ marginTop: '30px', textAlign: 'center', display: 'flex', justifyContent: 'center', gap: '20px' }}>
-        <div style={{ padding: '20px', backgroundColor: '#27ae60', color: 'white', borderRadius: '8px', cursor: 'pointer', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+        <button
+          onClick={handleAddCourse}
+          style={{ padding: '20px', backgroundColor: '#27ae60', color: 'white', borderRadius: '8px', cursor: 'pointer', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', border: 'none' }}
+        >
           <h3>Add Course</h3>
-        </div>
-        <div style={{ padding: '20px', backgroundColor: '#e74c3c', color: 'white', borderRadius: '8px', cursor: 'pointer', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
-          <h3>Remove Course</h3>
-        </div>
+        </button>
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
-from flask import request, jsonify, session
-from dao.user_dao import UserDao
-from model.student import User
 import json
+
+from flask import request, jsonify, session
+
+from dao.user_dao import UserDao
+
 
 class UserController:
     def __init__(self):

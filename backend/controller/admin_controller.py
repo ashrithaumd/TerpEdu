@@ -33,6 +33,7 @@ class AdminController:
         try:
             # Fetch announcements using DAO
             announcements = self.admin_dao.get_announcements()
+            
             return {"status": "success", "announcements": announcements}
         except Exception as e:
             # Handle any exceptions and return an error message
