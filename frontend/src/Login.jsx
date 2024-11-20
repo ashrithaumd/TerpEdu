@@ -10,41 +10,33 @@ function Login() {
     event.preventDefault();
 
     try {
-      // Make POST request to backend for login using fetch
       const response = await fetch('http://127.0.0.1:5000/user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          user_id: userID, // Ensure key matches what the backend expects
+          user_id: userID,
           password: password
         })
       });
 
       const data = await response.json();
-      console.log('Response data:', data); // Debug statement to inspect the response
-
       if (data.status === 'success') {
-        console.log('User role:', data.role); // Debug statement to check the role
-        // Redirect based on role
         if (data.role === 'Admin') {
-          navigate('/admin_dashboard');
+          navigate(`/admin_dashboard/${encodeURIComponent(data.user_name)}`);
         } else if (data.role === 'Student') {
-          navigate('/student_dashboard');
+          navigate(`/student_dashboard/${encodeURIComponent(data.user_name)}`);
         } else if (data.role === 'Instructor') {
-          navigate('/instructor_dashboard');
+          navigate(`/dash/${encodeURIComponent(data.user_name)}`);
         } else {
-          console.error('No specific dashboard available for this role.');
           alert('No specific dashboard available for this role.');
         }
       } else {
-        console.error('Login failed:', data.message);
-        alert('Login failed: ' + data.message); // Provide user feedback
+        alert('Login failed: ' + data.message);
       }
     } catch (error) {
-      console.error('An error occurred during login:', error);
-      alert('An error occurred during login. Please try again.'); // Provide user feedback
+      alert('An error occurred during login. Please try again.');
     }
   };
 
@@ -57,9 +49,11 @@ function Login() {
     <div>
       <style>
         {`
+          @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400&display=swap');
+
           body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Open Sans', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -72,103 +66,110 @@ function Login() {
             width: 100%;
             background-color: #d32f2f;
             color: white;
-            padding: 10px 20px;
+            height: 70px;
+            padding: 0 20px;
             font-size: 22px;
-            text-align: center;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            text-align: left;
             position: fixed;
             top: 0;
             left: 0;
             z-index: 2;
-          }
-
-          .login-container {
-            width: 100%;
-            max-width: 1040px;
-            padding: 0 20px;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-            margin-top: 40px;
-          }
-
-          .main {
             display: flex;
-            flex-direction: column;
             align-items: center;
           }
 
-          .logo h1 {
-            font-size: 40px;
-            font-weight: bold;
-            margin: 0;
+          .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px; /* Increased width */
+            margin-top: 100px;
+            padding: 20px;
           }
 
-          .logo p {
-            margin: 0;
-            font-style: italic;
+          .logo {
+            margin-bottom: 20px;
+            text-align: center;
+          }
+
+          .logo img {
+            max-width: 300px;
+            height: auto;
           }
 
           .login-box {
-            width: 350px;
-            padding: 30px;
-            border: 1px solid #f2f2f2;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
+            width: 100%;
+            max-width: 500px; /* Increased width */
+            padding: 40px; /* Increased padding */
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 2px solid #f0b0b0;
+            background-color: #fff;
             text-align: center;
-            transition: box-shadow 0.3s ease;
-          }
-
-          .login-box:hover {
-            box-shadow: 0 8px 16px rgba(0, 0, 255, 0.2);
+            margin-top: 10px;
           }
 
           .login-icons {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Increased margin */
+            font-size: 24px; /* Increased size for 'x' */
           }
 
           .icon {
-            width: 24px;
-            height: 24px;
+            width: 70px; /* Increased size */
+            height: 70px; /* Increased size */
+            margin: 0 15px; /* Increased margin */
           }
 
-          .login-box h2 {
-            margin-bottom: 10px;
+          .login-box h3 {
+            font-size: 36px; /* Increased size */
+            font-family: 'Open Sans', sans-serif;
+            margin-bottom: 20px; /* Increased margin */
+            color: #333;
           }
 
           form input {
             width: 100%;
-            padding: 12px;
-            margin: 12px 0;
+            padding: 14px; /* Increased padding */
+            margin: 12px 0; /* Increased margin */
             border-radius: 5px;
             border: 1px solid #ddd;
-            box-shadow: 0 0 5px rgba(173, 216, 230, 0.6);
+            font-family: 'Open Sans', sans-serif;
           }
 
           .login-button {
             width: 100%;
-            padding: 12px;
+            padding: 14px; /* Increased padding */
             background-color: #d32f2f;
             color: white;
             border: none;
             border-radius: 5px;
             font-weight: bold;
+            font-family: 'Open Sans', sans-serif;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 12px; /* Increased margin */
           }
 
-          .signup-button {
-            width: 100%;
-            padding: 5%;
-            margin-top: 5px;
-            background-color: #d32f2f;
-            color: white;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
+          .login-button:hover {
+            background-color: #b71c1c;
+          }
+
+          .side-image-container {
+            position: fixed;
+            top: 70px; /* Align with bottom of header */
+            right: 0;
+            bottom: 0; /* Extend to bottom of screen */
+            z-index: 0;
+          }
+
+          .side-image {
+            height: 100%; /* Stretch to fill container height */
+            width: auto; /* Maintain aspect ratio */
           }
         `}
       </style>
@@ -180,7 +181,7 @@ function Login() {
       <div className="login-container">
         <main className="main">
           <div className="logo">
-            <img src="./frontend/public/TerpEdu.png" alt="TerpEdu Logo" />
+            <img src="/TerpEdu.png" alt="TerpEdu Logo" />
           </div>
           <div className="login-box">
             <h3>LOGIN</h3>
@@ -208,9 +209,12 @@ function Login() {
               />
               <button type="submit" className="login-button">Login</button>
             </form>
-            <button onClick={handleSignup} className="signup-button">Signup</button>
+            <button onClick={handleSignup} className="login-button">Signup</button>
           </div>
         </main>
+      </div>
+      <div className="side-image-container">
+        <img src="turtle.png" alt="Turtle" className="side-image" />
       </div>
     </div>
   );

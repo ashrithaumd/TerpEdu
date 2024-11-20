@@ -47,138 +47,128 @@ function Signup() {
     <div>
       <style>
         {`
+          @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400&display=swap');
+
           body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Open Sans', sans-serif;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Changed from center to flex-start */
             height: 100vh;
             background-color: #fff;
-            overflow: hidden;
+            overflow-y: auto; /* Makes the page scrollable */
           }
 
           .header {
             width: 100%;
             background-color: #d32f2f;
             color: white;
-            padding: 10px 20px;
+            height: 70px;
+            padding: 0 20px;
             font-size: 22px;
-            text-align: center;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            text-align: left;
             position: fixed;
             top: 0;
             left: 0;
             z-index: 2;
+            display: flex;
+            align-items: center;
           }
 
-          .login-container {
-            width: 100%;
-            max-width: 1040px;
-            padding: 0 20px;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-            margin-top: 40px;
-          }
-
-          .main {
+          .signup-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-          }
-
-          .logo h1 {
-            font-size: 40px;
-            font-weight: bold;
-            margin: 0;
-          }
-
-          .logo p {
-            margin: 0;
-            font-style: italic;
-          }
-
-          .login-box {
-            width: 350px;
-            padding: 30px;
-            border: 1px solid #f2f2f2;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-            text-align: center;
-            transition: box-shadow 0.3s ease;
-          }
-
-          .login-box:hover {
-            box-shadow: 0 8px 16px rgba(0, 0, 255, 0.2);
-          }
-
-          .login-icons {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-          }
-
-          .icon {
-            width: 24px;
-            height: 24px;
-          }
-
-          .login-box h2 {
-            margin-bottom: 10px;
-          }
-
-          form input {
             width: 100%;
-            padding: 12px;
-            margin: 12px 0;
+            max-width: 600px; /* Match the login max width */
+            margin-top: 100px;
+            padding: 20px;
+          }
+
+          .logo {
+            margin-bottom: 20px;
+            text-align: center;
+          }
+
+          .logo img {
+            max-width: 300px;
+            height: auto;
+          }
+
+          .signup-box {
+            width: 100%;
+            max-width: 500px; /* Match the login box width */
+            padding: 40px; /* Match the padding of login box */
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 2px solid #f0b0b0;
+            background-color: #fff;
+            text-align: center;
+            margin-top: 10px;
+          }
+
+          .signup-box h3 {
+            font-size: 36px; /* Match the login heading size */
+            font-family: 'Open Sans', sans-serif;
+            margin-bottom: 20px;
+            color: #333;
+          }
+
+          form input, form select {
+            width: 100%;
+            padding: 14px; /* Match padding of login inputs */
+            margin: 12px 0; /* Match margin of login inputs */
             border-radius: 5px;
             border: 1px solid #ddd;
-            box-shadow: 0 0 5px rgba(173, 216, 230, 0.6);
+            font-family: 'Open Sans', sans-serif;
           }
 
-          .login-button {
+          .signup-button {
             width: 100%;
-            padding: 12px;
+            padding: 14px; /* Match padding of login button */
             background-color: #d32f2f;
             color: white;
             border: none;
             border-radius: 5px;
             font-weight: bold;
+            font-family: 'Open Sans', sans-serif;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 12px; /* Match margin of login button */
+          }
+
+          .signup-button:hover {
+            background-color: #b71c1c;
           }
 
           .side-image-container {
-            position: absolute;
-            top: -10px;
-            right: -500px;
-            width: 200px;
-            height: 200%;
-            overflow: hidden;
+            position: fixed;
+            top: 70px; /* Align with bottom of header */
+            right: 0;
+            bottom: 0; /* Extend to bottom of screen */
             z-index: 0;
           }
 
           .side-image {
-            width: 560px;
-            height: auto;
-            position: relative;
-            left: -85px;
+            height: 100%; /* Stretch to fill container height */
+            width: auto; /* Maintain aspect ratio */
           }
         `}
       </style>
+
       <header className="header">
         <h1>TerpEdu</h1>
       </header>
 
-      <div className="login-container">
+      <div className="signup-container">
         <main className="main">
           <div className="logo">
             <img src="/TerpEdu.png" alt="TerpEdu Logo" />
           </div>
-          <div className="login-box">
-            <h1>SIGN UP</h1>
+          <div className="signup-box">
+            <h3>SIGN UP</h3>
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
@@ -222,7 +212,7 @@ function Signup() {
                   Select Role
                 </option>
                 <option value="Student">Student</option>
-                <option value="Teacher">Teacher</option>
+                <option value="Instructor">Instructor</option>
                 <option value="Admin">Admin</option>
               </select>
               <input
@@ -241,18 +231,13 @@ function Signup() {
                 value={formData.phoneNumber}
                 onChange={handleChange}
               />
-              <button type="submit" className="login-button">Sign Up</button>
+              <button type="submit" className="signup-button">Sign Up</button>
             </form>
           </div>
         </main>
-
-        <div className="side-image-container">
-          <img
-            src="https://media.istockphoto.com/id/1700535742/vector/turtle-icon.jpg?s=2048x2048&w=is&k=20&c=ZdczUpIyBaX2ymL9bs_i_SKQZUaEcogf4XdNPhB0Dbw="
-            alt="Side Turtle"
-            className="side-image"
-          />
-        </div>
+      </div>
+      <div className="side-image-container">
+        <img src="turtle.png" alt="Turtle" className="side-image" />
       </div>
     </div>
   );

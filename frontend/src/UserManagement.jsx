@@ -14,7 +14,7 @@ function UserManagement() {
         const response = await fetch('http://127.0.0.1:5000/user/get_all_users');
         if (response.ok) {
           const data = await response.json();
-          console.log('Fetched user data:', data); // Debugging statement
+          console.log('Fetched user data:', data);
           setUsers(data);
         } else {
           console.error('Error fetching user data:', response);
@@ -27,7 +27,6 @@ function UserManagement() {
     };
 
     fetchUsers();
-    // fetchUserName();
   }, []);
 
   const handleAssignCoursesClick = () => {
@@ -38,22 +37,47 @@ function UserManagement() {
     <div className="user_management">
       <style>
         {`
+          @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400&display=swap');
+
           body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f0f2f5;
+            overflow-y: auto; /* Allows vertical scrolling */
           }
+
           .header {
             width: 100%;
-            background-color: #d32f2f;
+            background-color: #D32F2F;
             color: white;
-            padding: 20px;
+            padding: 15px 20px;
             font-size: 24px;
-            text-align: center;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            position: relative;
           }
+
+          .terp-title {
+            font-weight: bold;
+            margin-right: auto;
+          }
+
+          .welcome-message {
+            text-align: center;
+            font-size: 18px;
+            flex: 1;
+          }
+
+          .logo-container {
+            text-align: center;
+            margin-top: 20px;
+          }
+
+          .logo-container img {
+            max-width: 200px;
+            height: auto;
+          }
+
           .table-container {
             margin: 20px;
             padding: 20px;
@@ -61,43 +85,59 @@ function UserManagement() {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             background-color: #ffffff;
           }
+
           table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            font-size: 18px; /* Increased font size */
+            font-size: 18px;
           }
+
           table th, table td {
             padding: 15px;
             border: 1px solid #dddddd;
             text-align: center;
           }
+
           table th {
-            background-color: #f2a65a;
+            background-color: #D32F2F;
             color: #ffffff;
           }
+
+          table tr:nth-child(even) {
+            background-color: #f5f5f5;
+          }
+
+          table tr:nth-child(odd) {
+            background-color: #ffffff;
+          }
+
           .assign-courses-card {
             margin: 20px;
-            padding: 20px;
+            padding: 15px;
             border-radius: 8px;
-            background-color: #1976d2;
+            background-color: #4CAF50;
             color: white;
             text-align: center;
             font-size: 20px;
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
           }
+
+          .assign-courses-card:hover {
+            background-color: #45a049;
+          }
         `}
       </style>
 
       <header className="header">
-        <div className="header-logo">
-          <img src="/TerpEdu.png" alt="TerpEdu Logo" />
-          <h1>USER MANAGEMENT</h1>
-        </div>
+        <div className="terp-title">TerpEdu User Management</div>
         <div className="welcome-message">Hi {userName ? userName : 'User'}, Welcome back!</div>
-        <div className="profile-icon"></div>
       </header>
+
+      <div className="logo-container">
+        <img src="/TerpEdu.png" alt="TerpEdu Logo" />
+      </div>
 
       <div className="table-container">
         {loading ? (

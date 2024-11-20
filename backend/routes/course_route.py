@@ -11,3 +11,5 @@ course_bp.route("/get_uploaded_materials/<int:user_id>", methods=["GET"])(course
 course_bp.route("/<int:course_id>", methods=["GET"])(course_controller.get_course)
 course_bp.route("/get_active_courses",methods=["GET","POST"])(course_controller.get_active_courses)
 course_bp.route("/get_all_courses",methods=["GET","POST"])(course_controller.get_all_courses)
+course_bp.route("/get_user_counts", methods=["GET"])(course_controller.get_user_counts)
+course_bp.route("/get_enrolled/<int:course_id>",methods=["POST","GET"])(course_controller.get_enrolled)

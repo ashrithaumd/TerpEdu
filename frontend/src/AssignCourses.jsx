@@ -6,13 +6,14 @@ function AssignCourses() {
   const [selectedInstructors, setSelectedInstructors] = useState({});
 
   useEffect(() => {
-    // Fetch active courses
+    // Fetch active courses from backend and set initial instructor selection
     const fetchCourses = async () => {
       try {
         const response = await fetch('http://127.0.0.1:5000/course/get_active_courses');
         if (response.ok) {
           const data = await response.json();
           setCourses(data);
+          // Initialize instructor selections for each course
           const initialSelection = {};
           data.forEach((course) => {
             initialSelection[course.CourseID] = course.InstructorID || '';
@@ -26,7 +27,7 @@ function AssignCourses() {
       }
     };
 
-    // Fetch instructors
+    // Fetch available instructors from backend
     const fetchInstructors = async () => {
       try {
         const response = await fetch('http://127.0.0.1:5000/course/get_instructors');
@@ -41,10 +42,12 @@ function AssignCourses() {
       }
     };
 
+    // Fetch data for courses and instructors on component mount
     fetchCourses();
     fetchInstructors();
   }, []);
 
+  // Handle changes in instructor selection for a given course
   const handleInstructorChange = (courseId, instructorId) => {
     setSelectedInstructors((prev) => ({
       ...prev,
@@ -52,6 +55,7 @@ function AssignCourses() {
     }));
   };
 
+  // Handle saving instructor assignments for selected courses
   const handleSave = async () => {
     try {
       const response = await fetch('http://127.0.0.1:5000/course/assign_instructors', {
@@ -76,6 +80,7 @@ function AssignCourses() {
 
   return (
     <div className="assign-courses">
+      {/* Inline styling for the page */}
       <style>
         {`
           .table-container {
@@ -124,6 +129,7 @@ function AssignCourses() {
 
       <div className="header">Assign Courses</div>
 
+      {/* Display a table of courses with dropdown to select instructors */}
       <div className="table-container">
         <table>
           <thead>
@@ -156,6 +162,8 @@ function AssignCourses() {
           </tbody>
         </table>
       </div>
+
+      {/* Save button to save instructor assignments of courses */}
       <button className="save-button" onClick={handleSave}>
         Save
       </button>
