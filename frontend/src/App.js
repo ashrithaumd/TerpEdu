@@ -14,6 +14,7 @@ import UploadedMaterials from './uploaded_materials';
 import Calendar from './calender';
 import CourseManagement from './CourseManagement';
 import AssignCourses from './AssignCourses';
+import StudentDashboard from './StudentDashboard';
 
 function App() {
   return (
@@ -33,7 +34,7 @@ function App() {
         <Route path="/uploaded_materials" element={<UploadedMaterials />} />
         <Route path="/assign-courses" element={<AssignCourses />} />
         <Route path="/get_course/:courseId/:name/:description/:department/:instructorId" element={<GetCourse />} />
-
+        <Route path="/student_dashboard" element={<StudentDashboard />} />
       </Routes>
     </Router>
   );

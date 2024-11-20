@@ -31,9 +31,9 @@ function Login() {
         if (data.role === 'Admin') {
           navigate('/admin_dashboard');
         } else if (data.role === 'Student') {
-          navigate('/student_dashboard');
+          navigate(`/student_dashboard`);
         } else if (data.role === 'Instructor') {
-          navigate('/instructor_dashboard');
+          navigate('/dash');
         } else {
           console.error('No specific dashboard available for this role.');
           alert('No specific dashboard available for this role.');
