@@ -14,7 +14,7 @@ class StudentDao:
         sql_check = """
         SELECT COUNT(*) 
         FROM stu_enrollments
-        WHERE UserID = %s;
+        WHERE UserID = ?;
         """
         params_check = (user_id,)
         result = dao.execute_query(sql_check, params_check, fetch=True)
@@ -25,7 +25,7 @@ class StudentDao:
         # Insert the enrollment record
         sql_insert = """
         INSERT INTO stu_enrollments (UserID, CourseID)
-        VALUES (%s, %s);
+        VALUES (?, ?);
         """
         params_insert = (user_id, course_id)
         dao.execute_query(sql_insert, params_insert)
@@ -37,7 +37,7 @@ class StudentDao:
         """
         sql = """
         DELETE FROM stu_enrollments
-        WHERE UserID = %s AND CourseID = %s;
+        WHERE UserID = ? AND CourseID = ?;
         """
         params = (user_id, course_id)
         dao.execute_query(sql, params)
@@ -48,7 +48,7 @@ class StudentDao:
         SELECT c.course_id, c.course_name, c.description, c.credits, c.department, c.semester, c.is_currently_active
         FROM stu_enrollments e
         JOIN courses c ON e.CourseID = c.course_id
-        WHERE e.UserID = %s;
+        WHERE e.UserID = ?;
         """
         params = (user_id,)
         result = dao.execute_query(sql, params, fetch=True)
@@ -64,7 +64,7 @@ class StudentDao:
         sql = """
         SELECT course_id, course_name, description, credits, department, semester, is_currently_active
         FROM courses
-        WHERE course_id = %s;
+        WHERE course_id = ?;
         """
         params = (course_id,)
         return dao.execute_query(sql, params, fetch=True)
@@ -77,7 +77,7 @@ class StudentDao:
         sql = """
         SELECT material_id, material_type, title, upload_date, file_path
         FROM course_materials
-        WHERE course_id = %s;
+        WHERE course_id = ?;
         """
         params = (course_id,)
         return dao.execute_query(sql, params, fetch=True)
@@ -91,7 +91,7 @@ class StudentDao:
         SELECT u.UserID, u.Name, u.Email
         FROM stu_enrollments e
         JOIN users u ON e.UserID = u.UserID
-        WHERE e.CourseID = %s;
+        WHERE e.CourseID = ?;
         """
         params = (course_id,)
         return dao.execute_query(sql, params, fetch=True)
@@ -114,7 +114,7 @@ class StudentDao:
         sql = """
         SELECT material_id, material_type, title, file_path
         FROM course_materials
-        WHERE course_id = %s;
+        WHERE course_id = ?;
         """
         params = (course_id,)
         return dao.execute_query(sql, params, fetch=True)
@@ -125,7 +125,7 @@ class StudentDao:
         sql_count = """
         SELECT COUNT(*) 
         FROM stu_enrollments 
-        WHERE UserID = %s;
+        WHERE UserID = ?;
         """
         params_count = (user_id,)
         enrolled_count = dao.execute_query(sql_count, params_count, fetch=True)[0][0]
@@ -139,7 +139,7 @@ class StudentDao:
         SELECT course_id, course_name
         FROM courses
         WHERE course_id NOT IN (
-            SELECT CourseID FROM stu_enrollments WHERE UserID = %s
+            SELECT CourseID FROM stu_enrollments WHERE UserID = ?
         ) AND is_currently_active = 1;
         """
         params_available = (user_id,)

@@ -22,7 +22,7 @@ class InstDao:
         SELECT c.course_id, c.course_name, c.description, c.department
         FROM courses c
         INNER JOIN course_instructors ci ON c.course_id = ci.course_id
-        WHERE ci.instructor_id = %s
+        WHERE ci.instructor_id = ?
         """
         results = dao.execute_query(sql, (instructor_id,), fetch=True)
         return results
@@ -44,7 +44,7 @@ class InstDao:
         """
         sql = """
         INSERT INTO announcements (course_id, UserID, announcement, date_posted)
-        VALUES (%s, %s, %s, NOW());
+        VALUES (?, ?, ?, CURRENT_TIMESTAMP);
         """
         params = (course_id, user_id, announcement)
         try:

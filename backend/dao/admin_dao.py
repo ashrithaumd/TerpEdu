@@ -20,7 +20,7 @@ class AdminDao:
         """
         sql = """
         INSERT INTO enrollments (UserID, CourseID, Status)
-        VALUES (%s, %s, %s);
+        VALUES (?, ?, ?);
         """
         params = (user_id, course_id, status)
         dao.execute_query(sql, params)  # Executes the query using provided parameters.

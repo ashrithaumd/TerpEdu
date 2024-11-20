@@ -1,4 +1,4 @@
-import mysql.connector
+import sqlite3
 from utils import logger
 
 # Function to establish a database connection
@@ -10,12 +10,7 @@ def get_db_connection():
     """
     try:
         # Connect to the MySQL database using specified credentials
-        connection = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="root",
-            database="terpedu"
-        )
+        connection = sqlite3.connect("terpedu.db")
         return connection
     except Exception as error:
         # Log and return None if an error occurs during the connection attempt
@@ -26,7 +21,7 @@ def get_db_connection():
 def close_db_connection(conn):
     """
     Closes an active MySQL database connection.
-    Args:
+   _ Args:
         conn (MySQLConnection): The database connection object to close.
     """
     if conn:
@@ -54,7 +49,7 @@ def execute_query(sql, params=None, fetch=False):
                 data = None
             cursor.close()
             return data
-        except mysql.connector.Error as e:
+        except Exception as e:
             # Log and print any errors encountered during database operations
             logger.error(f"Database operation failed: {e}")
             print(f"Database error: {e}")

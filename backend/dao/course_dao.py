@@ -26,7 +26,7 @@ class CourseDao:
         """
         sql = """
         INSERT INTO courses (course_id, course_name, description, credits, department, semester, is_currently_active)
-        VALUES (%s, %s, %s, %s, %s, %s, %s);
+        VALUES (?, ?, ?, ?, ?, ?, ?);
         """
         params = (course_id, course_name, description, credits, department, semester, is_currently_active)
         dao.execute_query(sql, params)
@@ -47,7 +47,7 @@ class CourseDao:
         """
         sql = """
         INSERT INTO course_materials (course_id, material_type, title, file_path, user_id)
-        VALUES (%s, %s, %s, %s, %s);
+        VALUES (?, ?, ?, ?, ?);
         """
         params = (course_id, material_type, title, file_path, inst_id)
         return dao.execute_query(sql, params)
@@ -68,7 +68,7 @@ class CourseDao:
         sql = """
         SELECT material_id, material_type, title, file_path
         FROM course_materials
-        WHERE course_id = %s
+        WHERE course_id = ?
         """
         params = (course_id,)
         return dao.execute_query(sql, params, fetch=True)
@@ -89,7 +89,7 @@ class CourseDao:
         sql = """
         SELECT * 
         FROM course_materials
-        WHERE user_id = %s
+        WHERE user_id = ?
         """
         params = (user_id,)
         return dao.execute_query(sql, params, fetch=True)
@@ -107,7 +107,7 @@ class CourseDao:
         SQL Query:
             Selects the course name from the courses table.
         """
-        sql = "SELECT course_name FROM courses WHERE id = %s"
+        sql = "SELECT course_name FROM courses WHERE id = ?"
         param = [course_id]
         return dao.execute_query(sql, param)[0][0]
     
@@ -188,8 +188,8 @@ class CourseDao:
         for course_id, instructor_id in assignments.items():
             sql = """
             INSERT INTO course_instructors (course_id, instructor_id)
-            VALUES (%s, %s)
-            ON DUPLICATE KEY UPDATE instructor_id = %s
+            VALUES (?, ?)
+            ON DUPLICATE KEY UPDATE instructor_id = ?
             """
             params = (course_id, instructor_id, instructor_id)
             dao.execute_query(sql, params=params)
@@ -228,14 +228,14 @@ class CourseDao:
         sql = """
         SELECT COUNT(DISTINCT UserID) AS StudentCount
         FROM stu_enrollments
-        WHERE CourseID = %s;
+        WHERE CourseID = ?;
         """
         results = dao.execute_query(sql, (course_id,), fetch=True)  # Executes the query with the course ID.
         return results
     
     def remove_courses(self,course_id):
         sql="""
-        DELETE from courses WHERE course_id = %s;
+        DELETE from courses WHERE course_id = ?;
         """
         results =dao.execute_query(sql,(course_id,))
         return results

@@ -22,7 +22,7 @@ class UserDao:
         """
         sql = """
         INSERT INTO users (UserID, Name, Email, Password, Role, DateCreated)
-        VALUES (%s, %s, %s, %s, %s, NOW());
+        VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP);
         """
         params = (user_id, name, email, password, role)
         dao.execute_query(sql, params)
@@ -41,7 +41,7 @@ class UserDao:
         """
         sql = """
         INSERT INTO Profiles (UserID, Address, PhoneNumber)
-        VALUES (%s, %s, %s);
+        VALUES (?, ?, ?);
         """
         params = (user_id, address, phone_number)
         dao.execute_query(sql, params)
@@ -59,7 +59,7 @@ class UserDao:
         """
         sql = """
         INSERT INTO notifications (UserID, Message)
-        VALUES (%s, %s);
+        VALUES (?, ?);
         """
         params = (user_id, message)
         dao.execute_query(sql, params)
@@ -81,7 +81,7 @@ class UserDao:
         SELECT n.NotificationID, n.UserID, n.Message, n.DateSent, n.course_id, u.role
         FROM notifications n
         JOIN users u ON n.UserID = u.UserID
-        WHERE n.course_id = %s
+        WHERE n.course_id = ?
         """
         params = [course_id]
         results = dao.execute_query(sql, params, fetch=True)
@@ -100,7 +100,7 @@ class UserDao:
         Returns:
             The first result (if found) or None if no user is found.
         """
-        sql = "SELECT * FROM users WHERE UserID = %s"
+        sql = "SELECT * FROM users WHERE UserID = ?"
         params = [user_id]
         data = dao.execute_query(sql, params, fetch=True)  # Ensure fetch=True to get results
         
@@ -123,7 +123,7 @@ class UserDao:
         Returns:
             User data as JSON if found, otherwise None.
         """
-        sql = "SELECT * FROM users WHERE UserID = %s AND Password = %s"
+        sql = "SELECT * FROM users WHERE UserID = ? AND Password = ?"
         params = (user_id, password)
         try:
             print(f"Debug: Executing query with params {params}")  # Add debug statement

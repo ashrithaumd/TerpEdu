@@ -8,7 +8,7 @@ from model.user import User, Profile, Notification
 import os
 from flask_cors import CORS
 from flask import Flask, session
-# from flask_session import Session
+from flask_session import Session
 
 project_root = os.path.dirname(os.path.abspath(__file__))  # Get the absolute path to the backend directory
 frontend_build_path = os.path.join(project_root, 'build')
@@ -17,11 +17,11 @@ UPLOAD_FOLDER = os.path.join(project_root, 'build', 'materials')
 # Initialize the Flask app
 app = Flask(__name__, static_folder=frontend_build_path, static_url_path='')
 CORS(app,supports_credentials=True)
-# app.config['SECRET_KEY'] = 'da7bc86442a0cf44cc2aca2f5692d89e' 
-# app.config['SESSION_TYPE'] = 'filesystem'  
-# Session(app)
+app.config['SECRET_KEY'] = 'da7bc86442a0cf44cc2aca2f5692d89e'
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
 # Configure the app
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/terpedu'
+app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{app.root_path}/terpedu.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
