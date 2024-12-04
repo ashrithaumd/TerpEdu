@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function UploadedMaterials() {
+function UploadedMaterialsStudent() {
   const [materials, setMaterials] = useState([]);
   const [course_id, setCourseId] = useState('');
   const [submittedCourseId, setSubmittedCourseId] = useState(null);
@@ -252,4 +252,4 @@ function UploadedMaterials() {
   );
 }
 
-export default UploadedMaterials;
+export default UploadedMaterialsStudent;

@@ -224,7 +224,7 @@ function StudentDashboard() {
       <div className="navbar">
         <span onClick={() => navigate('/inbox')}>Inbox</span>
         <span onClick={() => navigate('/announcements')}>Announcements</span>
-        <span onClick={() => navigate('/uploaded_materials')}>Uploaded Materials</span>
+        <span onClick={() => navigate('/uploaded_materials_student')}>Uploaded Materials</span>
       </div>
 
       {/* Dashboard Content */}
