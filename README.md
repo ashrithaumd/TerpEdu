@@ -1,6 +1,14 @@
 Heruko Deployment link :
 https://terpedu-0949ddb44d51.herokuapp.com/
 
+User Id and Password's 
+Student id: 102
+password: Abc@1234
+Admin id: 103
+password: Abc@1234
+Instructor id: 107
+password: Abc@1234
+
 Installation Guide
 Installation Guide - SQLite Migration
 
