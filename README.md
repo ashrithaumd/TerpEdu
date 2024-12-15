@@ -1,3 +1,6 @@
+Heruko Deployment link :
+https://terpedu-0949ddb44d51.herokuapp.com/
+
 Installation Guide
 Installation Guide - SQLite Migration
 
